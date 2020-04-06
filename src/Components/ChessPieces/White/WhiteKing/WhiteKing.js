@@ -1,4 +1,5 @@
 import React from 'react'
+
 import King from './white_king.png'
 import '../../ChessPieces.css'
 
