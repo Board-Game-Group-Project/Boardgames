@@ -133,53 +133,5 @@ const mapStateToProps = reduxState => {
     player: reduxState.playerReducer.player,
   }
 }
-// <div className="header">
-//   <div className='header-buttons'>
-//     <div
-//       className='nav-buttons'
-//     >
-//       {Object.keys(props.player).length === 0 ? (
-//         null
-//       ):(
-//       <>
-//       <Link 
-//         to='/profile'
-//         className='nav-button'
-//         >
-//         PROFILE
-//       </Link>
-//       <Link 
-//         to='/chess'
-//         className='nav-button'
-//         >
-//         CHESS
-//       </Link>
-//       <Link 
-//         to='/scoreboard'
-//         className='nav-button'
-//         >
-//         SCORES
-//       </Link>
-//       </>
-//       )}
-//     </div>
-//     <h1 className='website-name'>
-//       SEXY BOARDGAMES
-//     </h1>
-//     {Object.keys(props.player).length === 0 ?(
-//       null
-//     ):(
-//     <h2
-//         className='logout'
-//         onClick={() => {
-//           props.logout()
-//           props.history.push(`/`)
-//         }}
-//       >
-//       LOGOUT
-//     </h2>
-//     )}
-//   </div>
-// </div>
-// )
+
 export default connect(mapStateToProps, { logout })(withRouter(Header));
