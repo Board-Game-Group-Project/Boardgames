@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
 import { withRouter, Redirect } from 'react-router-dom'
 import { login, register } from "../../ducks/playerReducer"
-import io from 'socket.io-client'
 import './Landing.css'
 
-let socket;
 
 function Landing (props) {
   const [registered, setRegistered] = useState(true)
@@ -13,12 +11,7 @@ function Landing (props) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  useEffect(() => {
-    socket = io('localhost:4420')
-
-    socket.emit('test',[props])
-
-  }, ['localhost:4420'])
+  
 
   const login = async () => {
     await props.login(username, password)
@@ -133,10 +126,7 @@ function Landing (props) {
           </form>
         </div>
       )}
-      <script>{() => {
-        var socket = io.connect();
-        console.log(socket)
-      }}</script>
+      
     </div>
   )
 }

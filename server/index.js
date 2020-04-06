@@ -19,8 +19,9 @@ app.get('/', (req,res) => {
 
 io.on('connection', (socket) => { 
     
-    socket.on('test', ()  => {
-        console.log('testing sockets')
+    socket.on('join', ()  => {
+        const serverID = socket.id
+        console.log(serverID)
     })
 
     socket.on('disconnect', () => {
