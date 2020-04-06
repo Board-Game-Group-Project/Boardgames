@@ -1,0 +1,35 @@
+.square {
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  border: solid 1px black;
+  float: left;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+}
+
+.square2 {
+  width: 50px;
+  height: 50px;
+  background-color: yellow;
+  border: solid 1px black;
+  float: left;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+}
+
+.chess-board {
+  width: 450px;
+  height: 450px;
+  margin-left: 38%;
+}

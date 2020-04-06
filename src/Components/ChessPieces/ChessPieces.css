@@ -1,0 +1,24 @@
+.chess-pieces {
+  height: 40px;
+  width: 40px;
+}
+
+.blackKing {
+  width: 70px;
+  height: 40px;
+}
+
+.blackKnight {
+  height: 35px;
+  width: 35px;
+}
+
+.whiteBishop {
+  width: 70px;
+  height: 40px;
+}
+
+.whiteKing {
+  width: 20px;
+  height: 40px;
+}
