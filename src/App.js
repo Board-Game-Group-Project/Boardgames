@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import routes from './routes'
+import { withRouter, Redirect } from 'react-router-dom'
+import {connect} from 'react-redux'
+import {checkPlayer} from './ducks/playerReducer'
+import Header from './Components/Header/Header'
+import Errors from './Components/Errors'
+import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+  componentDidMount() {
+    this.props.checkPlayer()
+  }
+
+  render() {
+    if (!this.props.player.username && this.props.location.pathname !== "/") {
+      return <Redirect to="/" />
+    }
+
+    return (
+      <div className={`App`}>
+        <Header />
+        {routes}
+        <Errors />
+      </div>
+    )
+  }
 }
 
-export default App;
+const mapStateToProps = reduxState => {
+  return {
+    player: reduxState.playerReducer.player
+  }
+}
+
+export default connect(mapStateToProps, {checkPlayer})(withRouter(App))
