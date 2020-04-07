@@ -1,7 +1,12 @@
 
 module.exports = {
 
-    join: (res,res) => {
+    join: (req,res) => {
 
+    },
+    queue: (req,res) => {
+        let user = req.data
+        console.log(user)
+        res.sendStatus(200)
     }
 }
