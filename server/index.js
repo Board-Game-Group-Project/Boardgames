@@ -5,6 +5,7 @@ const express = require("express"),
   socketIo = require('socket.io'),
   http = require('http'),
   authCtrl = require("./controllers/authController"),
+//   socketCtrl = require('./controllers/socketController')
   checkPlayer = require("./middleware/checkPlayer"),
   { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 
@@ -12,6 +13,8 @@ const app = express();
 
 const server = http.createServer(app)
 const io = socketIo(server)
+
+
 
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/index.js')
@@ -21,11 +24,16 @@ io.on('connection', (socket) => {
     
     socket.on('join', ()  => {
         const serverID = socket.id
-        console.log(serverID)
+        console.log(`User ${serverID} has connected`)
+    })
+    socket.on('queue', () => {
+        let rooms = []
+        let queue = [...rooms, {name:'Test',room:`${socket.id}`}]
+        console.log(queue)
     })
 
     socket.on('disconnect', () => {
-        console.log('user left test')
+        console.log(`User ${socket.id} left`)
     })
 })
 
@@ -63,3 +71,6 @@ app.put('/api/auth/edit/:id', authCtrl.edit)
 app.delete('/api/auth/delete/:id', authCtrl.delete)
 
 app.get('/api/check', checkPlayer)
+
+// SOCKET ENDPOINTS
+app.post(`/api/sockets/:id`, )
