@@ -14,6 +14,7 @@ const app = express();
 const server = http.createServer(app)
 const io = socketIo(server)
 
+const rooms = []
 const queue = [];
 
 app.get('/', (req,res) => {
@@ -28,15 +29,20 @@ io.on('connection', (socket) => {
     
     socket.on('join', ()  => {
             const serverID = socket.id
+            rooms.push(serverID)
             console.log(`User ${serverID} has connected`)
     })
     socket.on('queue', () => {
         if(queue.length !== 0){
             console.log('hit join room')
             var opponent = queue.pop()
-            var chessRoom = socket.id + '' + opponent.id
-            room(opponent.id) = chessRoom;
-            room(socket.id) = chessRoom;
+            var chessRoom = `${socket.id}` + '' + `${opponent.id}`
+            socket.join(chessRoom, () => {
+                console.log(socket.rooms)
+            })
+            opponent.join(chessRoom, () => {
+                console.log(opponent.rooms)
+            })
        }else{
            console.log('hit no one in socket')
             queue.push(socket)
