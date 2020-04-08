@@ -5,6 +5,7 @@ const express = require("express"),
   socketIo = require('socket.io'),
   http = require('http'),
   authCtrl = require("./controllers/authController"),
+  socketCtrl = require('./controllers/socketController')
   checkPlayer = require("./middleware/checkPlayer"),
   { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 
@@ -13,18 +14,43 @@ const app = express();
 const server = http.createServer(app)
 const io = socketIo(server)
 
+const rooms = []
+const queue = [];
+
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/index.js')
 })
 
+const queueConnect = function(socket){
+    
+}
+
 io.on('connection', (socket) => { 
     
-    socket.on('test', ()  => {
-        console.log('testing sockets')
+    socket.on('join', ()  => {
+            const serverID = socket.id
+            rooms.push(serverID)
+            console.log(`User ${serverID} has connected`)
     })
-
+    socket.on('queue', () => {
+        if(queue.length !== 0){
+            console.log('hit join room')
+            var opponent = queue.pop()
+            var chessRoom = `${socket.id}` + '' + `${opponent.id}`
+            socket.join(chessRoom, () => {
+                console.log(socket.rooms)
+            })
+            opponent.join(chessRoom, () => {
+                console.log(opponent.rooms)
+            })
+       }else{
+           console.log('hit no one in socket')
+            queue.push(socket)
+        }
+        console.log('hit queue')
+    })
     socket.on('disconnect', () => {
-        console.log('user left test')
+        console.log(`User ${socket.id} left`)
     })
 })
 
@@ -62,3 +88,6 @@ app.put('/api/auth/edit/:id', authCtrl.edit)
 app.delete('/api/auth/delete/:id', authCtrl.delete)
 
 app.get('/api/check', checkPlayer)
+
+// SOCKET ENDPOINTS
+app.post(`/api/sockets/queue`, socketCtrl.queue)
