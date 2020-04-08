@@ -8,7 +8,7 @@ let socket;
 
 function Socket (props) {
     const [rooms, setRooms] = useState([])
-    const [user, setUser] = useState('test')
+    const [user, setUser] = useState('')
     const [state, setState] = useState({
         username: "",
         message: "",
@@ -26,7 +26,6 @@ function Socket (props) {
           console.log(user)
         }, [])
         let join = () => {
-        console.log(socket)
         setUser(socket.id)
       }
         console.log(user)
@@ -39,7 +38,6 @@ function Socket (props) {
         <>
         <div>Sockets</div>
         <input placeholder='Room Name'></input>
-        <button onClick={() => console.log(user)}></button>
         <button onClick={() => socket.emit('queue', console.log(socket.id))}>Join Queue</button>
         <button onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}>Leave Room</button>
         </>

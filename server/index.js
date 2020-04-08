@@ -14,11 +14,15 @@ const app = express();
 const server = http.createServer(app)
 const io = socketIo(server)
 
-
+const queue = [];
 
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/index.js')
 })
+
+const queueConnect = function(socket){
+    
+}
 
 io.on('connection', (socket) => { 
     
@@ -27,9 +31,17 @@ io.on('connection', (socket) => {
             console.log(`User ${serverID} has connected`)
     })
     socket.on('queue', () => {
-        let rooms = []
-        let queue = [...rooms, {name:'Test',room:`${socket.id}`}]
-        console.log(queue)
+        if(queue.length !== 0){
+            console.log('hit join room')
+            var opponent = queue.pop()
+            var chessRoom = socket.id + '' + opponent.id
+            room(opponent.id) = chessRoom;
+            room(socket.id) = chessRoom;
+       }else{
+           console.log('hit no one in socket')
+            queue.push(socket)
+        }
+        console.log('hit queue')
     })
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} left`)
