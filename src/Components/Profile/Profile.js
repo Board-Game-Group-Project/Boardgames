@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { connect } from "react-redux";
 import { login, deletePlayer, editPlayer } from "../../ducks/playerReducer";
+import Socket from '../Socket/Socket'
 import './Profile.css'
 
 function Profile (props) {
@@ -118,6 +119,7 @@ function Profile (props) {
             }
           </div>
         </div>
+        <Socket/>
       {/* <div className="orders"></div> */}
     </div>
   )
@@ -125,7 +127,8 @@ function Profile (props) {
 
 const mapStateToProps = reduxState => {
   return {
-    player: reduxState.playerReducer.player
+    player: reduxState.playerReducer.player,
+
   };
 };
 
@@ -133,6 +136,7 @@ const mapDispatchToProps = {
   login,
   editPlayer,
   deletePlayer,
+  
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
