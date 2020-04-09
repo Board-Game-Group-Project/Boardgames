@@ -10,9 +10,9 @@ function Scoreboard (props) {
   const { player_id } = props.player
 
   useEffect(() => {
-    axios.get(`/api/scoreboard/:${player_id}`,{player_id}).then(() => {
-      console.log('hit')
-    })
+    axios.get(`/api/scoreboard/:${player_id}`,{player_id}).then((res) => {
+      console.log(res)
+    }).catch(err => console.log(err))
 
   })
   return (

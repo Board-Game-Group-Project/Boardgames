@@ -1,1 +1,3 @@
-SELECT * FROM personal_board WHERE player_id=$1
+SELECT * 
+    FROM personal_board 
+    WHERE player_id=$1
