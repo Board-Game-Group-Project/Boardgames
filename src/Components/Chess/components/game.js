@@ -92,7 +92,7 @@ export default class Game extends React.Component {
   render() {
 
     return (
-      <div>
+      <div style={{ marginLeft: '400px', marginTop: '100px' }}>
         <div className="game">
           <div className="game-board">
             <Board
