@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import axios from 'axios';
 import './Scoreboard.css'
 
 function Scoreboard (props) {
@@ -7,6 +8,13 @@ function Scoreboard (props) {
   const [personalScores, setPersonalScores] = useState({});
 
   const { player_id } = props.player
+
+  useEffect(() => {
+    axios.get(`/api/scoreboard/:${player_id}`,{player_id}).then(() => {
+      console.log('hit')
+    })
+
+  })
   return (
     <div className="scoreboard">
       This is the Scoreboard
