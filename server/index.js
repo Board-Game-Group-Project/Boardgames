@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
                 console.log(opponent.rooms)
             })
        }else{
-           console.log('hit no one in socket')
+           console.log('hit no one in socket room')
             queue.push(socket)
         }
         console.log('hit queue')
