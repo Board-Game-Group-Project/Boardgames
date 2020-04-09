@@ -7,6 +7,7 @@ const express = require("express"),
   authCtrl = require("./controllers/authController"),
   socketCtrl = require('./controllers/socketController')
   checkPlayer = require("./middleware/checkPlayer"),
+  scoreboardCtrl = require('./controllers/scoreboardController'),
   { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 
 const app = express();
@@ -44,7 +45,7 @@ io.on('connection', (socket) => {
                 console.log(opponent.rooms)
             })
        }else{
-           console.log('hit no one in socket')
+           console.log('hit no one in socket room')
             queue.push(socket)
         }
         console.log('hit queue')
@@ -91,3 +92,5 @@ app.get('/api/check', checkPlayer)
 
 // SOCKET ENDPOINTS
 app.post(`/api/sockets/queue`, socketCtrl.queue)
+//SCOREBOARD ENDPOINTS
+app.get(`/api/scoreboard/:id`, scoreboardCtrl.getScoreboard)
