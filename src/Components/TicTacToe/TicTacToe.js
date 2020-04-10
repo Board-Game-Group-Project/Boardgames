@@ -9,16 +9,21 @@ function TicTacToe(props){
    
     return(
     <>
-    {xOrO}
+    <div>
     <Square xOrO={xOrO}/>
     <Square xOrO={xOrO}/>
     <Square xOrO={xOrO}/>
+    </div>
+    <div>
     <Square xOrO={xOrO}/>
     <Square xOrO={xOrO}/>
     <Square xOrO={xOrO}/>
+    </div>
+    <div>
     <Square xOrO={xOrO}/>
     <Square xOrO={xOrO}/>
     <Square xOrO={xOrO}/>
+    </div>
     </>
     )
 
