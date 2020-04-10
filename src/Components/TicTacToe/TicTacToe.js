@@ -9,19 +9,19 @@ function TicTacToe(props){
 
    
     return(
-    <div className='box'>
-        <div className='tictactoeboard'>
+    <div className='tic-tac-box'>
+        <div className='tic-tac-board'>
             <div className='square'>
                 <Square xOrO={xOrO}/>
                 <Square xOrO={xOrO}/>
                 <Square xOrO={xOrO}/>
             </div>
-            <div className='square'>
+            <div className='tic-tac-square'>
                 <Square xOrO={xOrO}/>
                 <Square xOrO={xOrO}/>
                 <Square xOrO={xOrO}/>
             </div>
-            <div className='square'>
+            <div className='tic-tac-square'>
                 <Square xOrO={xOrO}/>
                 <Square xOrO={xOrO}/>
                 <Square xOrO={xOrO}/>

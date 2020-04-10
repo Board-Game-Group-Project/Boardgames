@@ -1,9 +1,9 @@
-.box {
+.tic-tac-box {
  position: fixed;
  top:120px;
 }
 
-.square {
+.tic-tac-square {
     display: flex;
     flex-direction: column;
     width: 100px;
@@ -12,7 +12,7 @@
     border-radius: 5px;
 }
 
-.tictactoeboard {
+.tic-tac-board {
     display: flex;
     justify-content: center;
     padding: 20px;
