@@ -1,4 +1,5 @@
 import React, {useState,useEffect} from 'react'
+import './Square.css';
 
 export default function Square(props){
     const [value,setValue] = useState('');
@@ -8,7 +9,7 @@ export default function Square(props){
     }
 
     return(
-    <button onClick={() => squareValue()}>
+    <button className='tictactoesquare' onClick={() => squareValue()}>
         {value}
     </button>
     )}
