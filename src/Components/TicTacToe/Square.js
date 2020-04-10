@@ -9,7 +9,11 @@ export default function Square(props){
     }
 
     return(
-    <button className='tictactoesquare' onClick={() => squareValue()}>
-        {value}
-    </button>
-    )}
+        <button 
+            className='tic-tac-square' 
+            onClick={() => squareValue()}
+        >
+            {value}
+        </button>
+    )
+}
