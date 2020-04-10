@@ -1,0 +1,100 @@
+.profile {
+  height: 90vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
+  padding-left: 5vw;
+  padding-right: 10vw;
+  color: #c0dee0;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+}
+
+.profile-info {
+  height: 20vh;
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+  background-color: rgba(52, 134, 170, 0.8);
+  font-size: larger;
+}
+
+.profile-card {
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: stretch;
+}
+
+.editing-card:hover, .deleting-card:hover, .sockets-card {
+  background: rgba(52, 134, 170, 0.6);
+}
+
+.editing-card, .deleting-card, .sockets-card {
+  margin: 2vh;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: stretch;
+  height: 25vh;
+  width: 25vw;
+  padding: 8px;
+  background-color: rgba(52, 134, 170, 0.8);
+}
+
+.sockets-card {
+  height: 60vh;
+  width: 30vw;
+}
+
+.profile-button {
+  height: 5vh;
+  width: 15vw;
+  background-color: rgba(225, 134, 68, 0.8);
+  border: none;
+  color: #c0dee0;
+  text-align: center;
+  text-decoration: none;
+  font-size: medium;
+  display: inline-block;
+  padding: 1vh;
+  margin-bottom: 1vw;
+}
+
+.profile-button:hover {
+  background-color: #e18644;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: space-around;
+  align-content: stretch;
+}
+
+.profile-input {
+  width: 15vw;
+  height: 2vw;
+  margin-bottom: .5vw;
+}

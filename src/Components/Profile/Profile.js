@@ -14,6 +14,9 @@ function Profile (props) {
   const { player_id } = props.player
   return (
     <div className="profile">
+      <div
+        className="player-info"
+      >
         <h1 className='profile-info'>
           <span>USERNAME: {username}</span>
           <span>EMAIL: {email}</span>
@@ -119,8 +122,8 @@ function Profile (props) {
             }
           </div>
         </div>
-        <Socket/>
-      {/* <div className="orders"></div> */}
+      </div>
+      <Socket/>
     </div>
   )
 }

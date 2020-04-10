@@ -15,28 +15,39 @@ function Socket (props) {
       const [socket, setSocket] = useState(io(state.endpoint));
     
       useEffect(() => {
-        socket.on('connect', () => join());
+        socket.on('connect', () => join())
+        socket.emit('join',)
+        console.log(user)
+      }, [])
 
-          socket.emit('join',)
-          
-          console.log(user)
-        }, [])
-        let join = () => {
+      let join = () => {
         setUser(socket.id)
       }
-        console.log(user)
-     
-
-
-    
+      
+      console.log(user)
 
     return(
-        <>
-        <div>Sockets</div>
-        <input placeholder='Room Name'></input>
-        <button onClick={() => socket.emit('queue', console.log(socket.id))}>Join Queue</button>
-        <button onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}>Leave Room</button>
-        </>
+        <div className="sockets-card" >
+          <h1>
+            JOIN A GAME
+          </h1>
+          <input 
+            className='profile-input'
+            placeholder='Room Name'
+          ></input>
+          <button 
+            className="profile-button"
+            onClick={() => socket.emit('queue', console.log(socket.id))}
+          >
+            Join Queue
+          </button>
+          <button 
+            className="profile-button"
+            onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}
+          >
+            Leave Room
+          </button>
+        </div>
     )
 }
 
