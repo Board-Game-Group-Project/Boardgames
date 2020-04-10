@@ -1,10 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import io from 'socket.io-client';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
-
-let socket;
-
 
 function Socket (props) {
     const [rooms, setRooms] = useState([])
