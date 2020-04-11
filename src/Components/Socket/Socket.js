@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom';
 function Socket (props) {
     const [rooms, setRooms] = useState([])
     const [user, setUser] = useState('')
+    const [gameList,setGameList] = useState(false)
+    const [selectedGame,setSelectedGame] = useState('Chess')
     const [state, setState] = useState({
         username: "",
         message: "",
@@ -15,26 +17,65 @@ function Socket (props) {
       const [socket, setSocket] = useState(io(state.endpoint));
     
       useEffect(() => {
-        socket.on('connect', () => join());
+        socket.on('connect', () => join())
+        socket.emit('join',)
+        console.log(user)
+      }, [])
 
-          socket.emit('join',)
-          
-          console.log(user)
-        }, [])
-        let join = () => {
+      let join = () => {
         setUser(socket.id)
       }
-        console.log(user)
-     
-
-
-    
+      
+      let gameListButton = () => {
+        setGameList(!gameList)
+        console.log(gameList)
+      }
+      
+      let chessGame = () => {
+        setSelectedGame('Chess')
+      }
+      let checkersGame = () => {
+        setSelectedGame('Checkers')
+      }
+      let tictactoeGame = () => {
+        setSelectedGame('Tic-Tac-Toe')
+      }
 
     return(
-        <>
-        <button onClick={() => socket.emit('queue', console.log(socket.id))}>Join Queue</button>
-        <button onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}>Leave Room</button>
-        </>
+      <>
+         <div className="sockets-card" >
+          <h1>
+            JOIN A GAME
+          </h1>
+          <div>
+            <h1>{selectedGame}</h1>
+            <button onClick={gameListButton}>
+              Game List
+          </button>
+          {gameList === false? (
+            null
+          ):(
+            <div>
+              <button onClick={chessGame}>Chess</button>
+              <button onClick={checkersGame}>Checkers</button>
+              <button onClick={tictactoeGame}>Tic-Tac-Toe</button>
+            </div>
+          )}
+          </div>
+          <button 
+            className="profile-button"
+            onClick={() => socket.emit('queue', console.log(socket.id))}
+          >
+            Join Queue
+          </button>
+          <button 
+            className="profile-button"
+            onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}
+          >
+            Leave Room
+          </button>
+        </div>
+    </>     
     )
 }
 
