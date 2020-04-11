@@ -32,8 +32,6 @@ function Socket (props) {
 
     return(
         <>
-        <div>Sockets</div>
-        <input placeholder='Room Name'></input>
         <button onClick={() => socket.emit('queue', console.log(socket.id))}>Join Queue</button>
         <button onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}>Leave Room</button>
         </>
