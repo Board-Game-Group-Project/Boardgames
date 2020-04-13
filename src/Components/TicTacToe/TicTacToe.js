@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './TicTacToe.css'
 
-function Square(props) {
+function Block(props) {
     return (
-        <button className="square" onClick={props.onClick}>
+        <button className="block" onClick={props.onClick}>
             {props.value}
         </button>
     );
@@ -33,7 +33,7 @@ class Board extends Component {
 
     renderSquare(i) {
         return (
-            <Square
+            <Block
                 value={this.state.squares[i]}
                 onClick={() => this.handleClick(i)}
             />
