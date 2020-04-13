@@ -79,6 +79,19 @@
   padding: 1vh;
   margin-bottom: 1vw;
 }
+.gamelist-button {
+  height: 5vh;
+  width: 10vw;
+  background-color: rgba(225, 134, 68, 0.8);
+  border: none;
+  color: #c0dee0;
+  text-align: center;
+  text-decoration: none;
+  font-size: medium;
+  display: inline-block;
+  padding: 1vh;
+  margin-bottom: 1vw;
+}
 
 .profile-button:hover {
   background-color: #e18644;

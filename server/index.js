@@ -5,7 +5,6 @@ const express = require("express"),
   socketIo = require('socket.io'),
   http = require('http'),
   authCtrl = require("./controllers/authController"),
-  socketCtrl = require('./controllers/socketController')
   checkPlayer = require("./middleware/checkPlayer"),
   scoreboardCtrl = require('./controllers/scoreboardController'),
   { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
@@ -15,16 +14,15 @@ const app = express();
 const server = http.createServer(app)
 const io = socketIo(server)
 
-const rooms = []
-const queue = [];
+const rooms = [];
+const queueChess = [];
+const queueCheckers = [];
+const queueTicTacToe = [];
+const gameToJoin = ['Chess'];
 
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/index.js')
 })
-
-const queueConnect = function(socket){
-    
-}
 
 io.on('connection', (socket) => { 
     
@@ -33,22 +31,77 @@ io.on('connection', (socket) => {
             rooms.push(serverID)
             console.log(`User ${serverID} has connected`)
     })
-    socket.on('queue', () => {
-        if(queue.length !== 0){
-            console.log('hit join room')
-            var opponent = queue.pop()
-            var chessRoom = `${socket.id}` + '' + `${opponent.id}`
-            socket.join(chessRoom, () => {
-                console.log(socket.rooms)
-            })
-            opponent.join(chessRoom, () => {
-                console.log(opponent.rooms)
-            })
-       }else{
-           console.log('hit no one in socket room')
-            queue.push(socket)
+    socket.on('queue', function(game){
+        let selectedGame = game
+        if(selectedGame === 'Chess'){
+            if(queueChess.length !== 0){
+                var opponent = queueChess.pop()
+                console.log(`Connected to ${opponent.id}`)
+                var chessRoom = `${socket.id}` + '' + `${opponent.id}`
+                socket.join(chessRoom, () => {
+                    console.log(socket.rooms)
+                })
+                opponent.join(chessRoom, () => {
+                    console.log(opponent.rooms)
+                })
+                socket.to(chessRoom).emit('joinChess');
+           }else{
+               console.log('No one in Chess queue')
+                queueChess.push(socket)
+            }
+        }else if(selectedGame === 'Checkers'){
+            if(queueCheckers.length !== 0){
+                var opponent = queueChess.pop()
+                console.log(`Connected to ${opponent.id}`)
+                var checkersRoom = `${socket.id}` + '' + `${opponent.id}`
+                socket.join(checkersRoom, () => {
+                    console.log(socket.rooms)
+                })
+                opponent.join(checkersRoom, () => {
+                    console.log(opponent.rooms)
+                })
+                socket.to(checkersRoom).emit('joinCheckers')
+
+           }else{
+               console.log('No one in Checkers queue')
+                queueCheckers.push(socket)
+            }
+        }else if(selectedGame === 'Tic-Tac-Toe'){
+            if(queueTicTacToe.length !== 0){
+                var opponent = queueTicTacToe.pop()
+                console.log(`Connected to ${opponent.id}`)
+                var ticTacToeRoom = `${socket.id}` + '' + `${opponent.id}`
+                socket.join(ticTacToeRoom, () => {
+                    console.log(socket.rooms)
+                })
+                opponent.join(ticTacToeRoom, () => {
+                    console.log(opponent.rooms)
+                })
+                socket.to(ticTacToeRoom).emit('joinTicTacToe');
+
+           }else{
+               console.log('No one in TicTacToe queue')
+                queueTicTacToe.push(socket)
+            }
+
         }
-        console.log('hit queue')
+    })
+    socket.on('leaveQueue', () => {
+        queueChess.forEach(e => {
+            if(e === socket.id){
+                queueChess.splice(e,1)
+            }
+        })
+        queueTicTacToe.forEach(e => {
+            if(e === socket.id){
+                queueChess.splice(e,1)
+            }
+        })
+        queueCheckers.forEach(e => {
+            if(e === socket.id){
+                queueChess.splice(e,1)
+            }
+        })
     })
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} left`)
@@ -90,7 +143,5 @@ app.delete('/api/auth/delete/:id', authCtrl.delete)
 
 app.get('/api/check', checkPlayer)
 
-// SOCKET ENDPOINTS
-app.post(`/api/sockets/queue`, socketCtrl.queue)
 //SCOREBOARD ENDPOINTS
 app.get(`/api/scoreboard/:id`, scoreboardCtrl.getScoreboard)

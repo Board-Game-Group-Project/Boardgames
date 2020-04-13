@@ -3,8 +3,11 @@ import io from 'socket.io-client';
 import { withRouter } from 'react-router-dom';
 
 function Socket (props) {
-    const [rooms, setRooms] = useState([])
-    const [user, setUser] = useState('')
+    const [rooms, setRooms] = useState([]);
+    const [user, setUser] = useState('');
+    const [gameList,setGameList] = useState(false);
+    const [selectedGame,setSelectedGame] = useState('Chess');
+    const [leaveQueue,setLeaveQueue] = useState(false);
     const [state, setState] = useState({
         username: "",
         message: "",
@@ -23,31 +26,76 @@ function Socket (props) {
       let join = () => {
         setUser(socket.id)
       }
-      
-      console.log(user)
+      let gameListButton = () => {
+        setGameList(!gameList)
+      }
+      let chessGame = () => {
+        setSelectedGame('Chess')
+      }
+      let checkersGame = () => {
+        setSelectedGame('Checkers')
+      }
+      let tictactoeGame = () => {
+        setSelectedGame('Tic-Tac-Toe')
+      }
+      let leaveQueueDisplay = () => {
+        setLeaveQueue(!leaveQueue)
+      }
 
+      socket.on('joinChess', () => {
+        props.history.push('/chess')
+      })
+      // socket.on('joinCheckers', () => {
+      //   props.history.push('/checkers')
+      // })
+      socket.on('joinTicTacToe', () => {
+        props.history.push('/tictactoe')
+      })
     return(
-        <div className="sockets-card" >
+      <>
+         <div className="sockets-card" >
           <h1>
             JOIN A GAME
           </h1>
-          <input 
-            className='profile-input'
-            placeholder='Room Name'
-          ></input>
+          <div>
+            <h1>{selectedGame}</h1>
+            {leaveQueue === false ? (
+              <div> 
+              <button
+                className="profile-button" 
+                onClick={gameListButton}>
+                  Game List
+            </button>
+            {gameList === false? (
+              null
+            ):(
+              <div>
+                <button  className='gamelist-button' onClick={chessGame}>Chess</button>
+                <button  className='gamelist-button' onClick={checkersGame}>Checkers</button>
+                <button  className='gamelist-button' onClick={tictactoeGame}>Tic-Tac-Toe</button>
+              </div>
+            )}
+            </div>
+            ):(
+              null
+            )}
+            </div>
+            {leaveQueue === false?(
           <button 
             className="profile-button"
-            onClick={() => socket.emit('queue', console.log(socket.id))}
-          >
-            Join Queue
+            onClick={() => socket.emit('queue',selectedGame,leaveQueueDisplay())}>
+                Join Queue
           </button>
-          <button 
-            className="profile-button"
-            onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}
-          >
-            Leave Room
-          </button>
+
+            ):(
+              <button
+              className="profile-button"
+              onClick={() => socket.emit('leaveQueue', leaveQueueDisplay())}>
+                Leave Queue
+              </button>
+            )}
         </div>
+    </>     
     )
 }
 
