@@ -43,7 +43,7 @@
   align-content: stretch;
 }
 
-.editing-card:hover, .deleting-card:hover, .sockets-card {
+.editing-card:hover, .deleting-card:hover, .sockets-card:hover {
   background: rgba(52, 134, 170, 0.6);
 }
 
