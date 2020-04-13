@@ -1,23 +1,40 @@
-.tic-tac-box {
- position: fixed;
- top:120px;
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
 }
 
-.tic-tac-square {
-    display: flex;
-    flex-direction: column;
-    width: 100px;
-    height: 250px;
-    /* background-color: aqua; */
-    border-radius: 5px;
+ol {
+  padding-left: 30px;
 }
 
-.tic-tac-board {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    background-color: crimson;
-    width: 300px;
-    height: 260px;
-    border-radius: 10px;
+ul {
+  padding-left: 30px;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.square {
+  background: rgb(38, 169, 212);
+  border: 1px solid black;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 100px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 100px;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-info {
+  margin-left: 20px;
 }
