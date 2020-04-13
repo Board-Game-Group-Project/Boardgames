@@ -18,7 +18,6 @@ const rooms = [];
 const queueChess = [];
 const queueCheckers = [];
 const queueTicTacToe = [];
-const gameToJoin = ['Chess'];
 
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/index.js')
@@ -87,21 +86,27 @@ io.on('connection', (socket) => {
         }
     })
     socket.on('leaveQueue', () => {
+        console.log(queueChess.length)
         queueChess.forEach(e => {
-            if(e === socket.id){
-                queueChess.splice(e,1)
+            console.log(e.id)
+            console.log(socket.id)
+            if(e.id === socket.id){
+                queueChess.pop()
             }
         })
         queueTicTacToe.forEach(e => {
-            if(e === socket.id){
-                queueChess.splice(e,1)
+            if(e.id === socket.id){
+                queueTicTacToe.pop()
             }
         })
         queueCheckers.forEach(e => {
-            if(e === socket.id){
-                queueChess.splice(e,1)
+            if(e.id === socket.id){
+                queueCheckers.pop()
             }
         })
+    })
+    socket.on('leaveGame', () => {
+        console.log(socket.id)
     })
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} left`)

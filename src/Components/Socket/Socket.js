@@ -41,6 +41,10 @@ function Socket (props) {
       let leaveQueueDisplay = () => {
         setLeaveQueue(!leaveQueue)
       }
+      let dropQueue = () => {
+        socket.emit('leaveQueue');
+        leaveQueueDisplay();
+      }
 
       socket.on('joinChess', () => {
         props.history.push('/chess')
@@ -90,7 +94,7 @@ function Socket (props) {
             ):(
               <button
               className="profile-button"
-              onClick={() => socket.emit('leaveQueue', leaveQueueDisplay())}>
+              onClick={dropQueue}>
                 Leave Queue
               </button>
             )}
