@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { connect } from 'react-redux';
 import Square from './Square';
+import Sockets from '../Socket/Socket';
 import './TicTacToe.css';
 
 function TicTacToe(props){
@@ -9,6 +10,9 @@ function TicTacToe(props){
 
    
     return(
+    <>
+    <div className='box'>
+        <div className='tictactoeboard'>
     <div className='tic-tac-box'>
         <div className='tic-tac-board'>
             <div className='square'>
@@ -28,6 +32,9 @@ function TicTacToe(props){
             </div>
         </div>
     </div>
+    </div>
+    </div>
+    </>
     )
 
 
