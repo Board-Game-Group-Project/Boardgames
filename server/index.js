@@ -44,6 +44,7 @@ io.on('connection', (socket) => {
                     console.log(opponent.rooms)
                 })
                 socket.to(chessRoom).emit('joinChess');
+                socket.emit('joinChess')
            }else{
                console.log('No one in Chess queue')
                 queueChess.push(socket)
@@ -60,6 +61,7 @@ io.on('connection', (socket) => {
                     console.log(opponent.rooms)
                 })
                 socket.to(checkersRoom).emit('joinCheckers')
+                socket.emit('joinCheckers')
 
            }else{
                console.log('No one in Checkers queue')
@@ -77,6 +79,7 @@ io.on('connection', (socket) => {
                     console.log(opponent.rooms)
                 })
                 socket.to(ticTacToeRoom).emit('joinTicTacToe');
+                socket.emit('joinTicTacToe')
 
            }else{
                console.log('No one in TicTacToe queue')

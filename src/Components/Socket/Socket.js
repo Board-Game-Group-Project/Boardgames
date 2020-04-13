@@ -48,6 +48,7 @@ function Socket (props) {
 
       socket.on('joinChess', () => {
         props.history.push('/chess')
+        console.log('hit joinChess')
       })
       // socket.on('joinCheckers', () => {
       //   props.history.push('/checkers')
