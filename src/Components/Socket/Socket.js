@@ -25,20 +25,23 @@ function Socket (props) {
       let join = () => {
         setUser(socket.id)
       }
-      
       let gameListButton = () => {
         setGameList(!gameList)
-        console.log(gameList)
       }
-      
       let chessGame = () => {
         setSelectedGame('Chess')
+        let game = selectedGame
+        socket.emit('selectedGame',game)
       }
       let checkersGame = () => {
         setSelectedGame('Checkers')
+        let game = selectedGame
+        socket.emit('selectedGame',game)
       }
       let tictactoeGame = () => {
         setSelectedGame('Tic-Tac-Toe')
+        let game = selectedGame
+        socket.emit('selectedGame',game)
       }
 
     return(
@@ -49,30 +52,30 @@ function Socket (props) {
           </h1>
           <div>
             <h1>{selectedGame}</h1>
-            <button onClick={gameListButton}>
-              Game List
+            <button
+              className="profile-button" 
+              onClick={gameListButton}>
+                Game List
           </button>
           {gameList === false? (
             null
           ):(
             <div>
-              <button onClick={chessGame}>Chess</button>
-              <button onClick={checkersGame}>Checkers</button>
-              <button onClick={tictactoeGame}>Tic-Tac-Toe</button>
+              <button  className='gamelist-button' onClick={chessGame}>Chess</button>
+              <button  className='gamelist-button' onClick={checkersGame}>Checkers</button>
+              <button  className='gamelist-button' onClick={tictactoeGame}>Tic-Tac-Toe</button>
             </div>
           )}
           </div>
           <button 
             className="profile-button"
-            onClick={() => socket.emit('queue', console.log(socket.id))}
-          >
-            Join Queue
+            onClick={() => socket.emit('queue', console.log(socket.id))}>
+                Join Queue
           </button>
           <button 
             className="profile-button"
-            onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}
-          >
-            Leave Room
+            onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}>
+               Leave Room
           </button>
         </div>
     </>     
