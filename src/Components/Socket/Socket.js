@@ -31,24 +31,26 @@ function Socket (props) {
       }
       let chessGame = () => {
         setSelectedGame('Chess')
-        let game = selectedGame
       }
       let checkersGame = () => {
         setSelectedGame('Checkers')
-        let game = selectedGame
       }
       let tictactoeGame = () => {
         setSelectedGame('Tic-Tac-Toe')
-        let game = selectedGame
       }
       let leaveQueueDisplay = () => {
-        if(leaveQueue === false){
-          setLeaveQueue(true)
-        }else{
-          setLeaveQueue(false)
-        }
+        setLeaveQueue(!leaveQueue)
       }
 
+      socket.on('joinChess', () => {
+        props.history.push('/chess')
+      })
+      // socket.on('joinCheckers', () => {
+      //   props.history.push('/checkers')
+      // })
+      socket.on('joinTicTacToe', () => {
+        props.history.push('/tictactoe')
+      })
     return(
       <>
          <div className="sockets-card" >
@@ -92,11 +94,6 @@ function Socket (props) {
                 Leave Queue
               </button>
             )}
-          <button 
-            className="profile-button"
-            onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}>
-               Leave Room
-          </button>
         </div>
     </>     
     )

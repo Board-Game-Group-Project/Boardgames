@@ -5,7 +5,6 @@ const express = require("express"),
   socketIo = require('socket.io'),
   http = require('http'),
   authCtrl = require("./controllers/authController"),
-  socketCtrl = require('./controllers/socketController')
   checkPlayer = require("./middleware/checkPlayer"),
   scoreboardCtrl = require('./controllers/scoreboardController'),
   { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
@@ -45,6 +44,7 @@ io.on('connection', (socket) => {
                 opponent.join(chessRoom, () => {
                     console.log(opponent.rooms)
                 })
+                socket.to(chessRoom).emit('joinChess');
            }else{
                console.log('No one in Chess queue')
                 queueChess.push(socket)
@@ -60,6 +60,8 @@ io.on('connection', (socket) => {
                 opponent.join(checkersRoom, () => {
                     console.log(opponent.rooms)
                 })
+                socket.to(checkersRoom).emit('joinCheckers')
+
            }else{
                console.log('No one in Checkers queue')
                 queueCheckers.push(socket)
@@ -75,6 +77,8 @@ io.on('connection', (socket) => {
                 opponent.join(ticTacToeRoom, () => {
                     console.log(opponent.rooms)
                 })
+                socket.to(ticTacToeRoom).emit('joinTicTacToe');
+
            }else{
                console.log('No one in TicTacToe queue')
                 queueTicTacToe.push(socket)
@@ -98,7 +102,6 @@ io.on('connection', (socket) => {
                 queueChess.splice(e,1)
             }
         })
-        console.log(queueChess,queueTicTacToe,queueCheckers)
     })
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} left`)
@@ -140,7 +143,5 @@ app.delete('/api/auth/delete/:id', authCtrl.delete)
 
 app.get('/api/check', checkPlayer)
 
-// SOCKET ENDPOINTS
-app.post(`/api/sockets/queue`, socketCtrl.queue)
 //SCOREBOARD ENDPOINTS
 app.get(`/api/scoreboard/:id`, scoreboardCtrl.getScoreboard)
