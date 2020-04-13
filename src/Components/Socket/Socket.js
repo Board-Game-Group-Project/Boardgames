@@ -3,10 +3,11 @@ import io from 'socket.io-client';
 import { withRouter } from 'react-router-dom';
 
 function Socket (props) {
-    const [rooms, setRooms] = useState([])
-    const [user, setUser] = useState('')
-    const [gameList,setGameList] = useState(false)
-    const [selectedGame,setSelectedGame] = useState('Chess')
+    const [rooms, setRooms] = useState([]);
+    const [user, setUser] = useState('');
+    const [gameList,setGameList] = useState(false);
+    const [selectedGame,setSelectedGame] = useState('Chess');
+    const [leaveQueue,setLeaveQueue] = useState(false);
     const [state, setState] = useState({
         username: "",
         message: "",
@@ -43,6 +44,13 @@ function Socket (props) {
         let game = selectedGame
         socket.emit('selectedGame',game)
       }
+      let leaveQueueDisplay = () => {
+        if(leaveQueue === false){
+          setLeaveQueue(true)
+        }else{
+          setLeaveQueue(false)
+        }
+      }
 
     return(
       <>
@@ -52,26 +60,41 @@ function Socket (props) {
           </h1>
           <div>
             <h1>{selectedGame}</h1>
-            <button
-              className="profile-button" 
-              onClick={gameListButton}>
-                Game List
-          </button>
-          {gameList === false? (
-            null
-          ):(
-            <div>
-              <button  className='gamelist-button' onClick={chessGame}>Chess</button>
-              <button  className='gamelist-button' onClick={checkersGame}>Checkers</button>
-              <button  className='gamelist-button' onClick={tictactoeGame}>Tic-Tac-Toe</button>
+            {leaveQueue === false ? (
+              <div> 
+              <button
+                className="profile-button" 
+                onClick={gameListButton}>
+                  Game List
+            </button>
+            {gameList === false? (
+              null
+            ):(
+              <div>
+                <button  className='gamelist-button' onClick={chessGame}>Chess</button>
+                <button  className='gamelist-button' onClick={checkersGame}>Checkers</button>
+                <button  className='gamelist-button' onClick={tictactoeGame}>Tic-Tac-Toe</button>
+              </div>
+            )}
             </div>
-          )}
-          </div>
+            ):(
+              null
+            )}
+            </div>
+            {leaveQueue === false?(
           <button 
             className="profile-button"
-            onClick={() => socket.emit('queue', console.log(socket.id))}>
+            onClick={() => socket.emit('queue',leaveQueueDisplay())}>
                 Join Queue
           </button>
+
+            ):(
+              <button
+              className="profile-button"
+              onClick={() => socket.emit('leaveQueue', leaveQueueDisplay())}>
+                Leave Queue
+              </button>
+            )}
           <button 
             className="profile-button"
             onClick={() => socket.emit('disconnect',console.log('hit disconnect')),() => {setRooms('')}}>

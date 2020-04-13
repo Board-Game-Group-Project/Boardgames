@@ -19,15 +19,11 @@ const rooms = [];
 const queueChess = [];
 const queueCheckers = [];
 const queueTicTacToe = [];
-const gameToJoin = [];
+const gameToJoin = ['Chess'];
 
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/index.js')
 })
-
-const queueConnect = function(socket){
-    
-}
 
 io.on('connection', (socket) => { 
     
@@ -37,7 +33,7 @@ io.on('connection', (socket) => {
             console.log(`User ${serverID} has connected`)
     })
     socket.on('selectedGame', function(selectedGame){
-        let game= selectedGame
+        let game = selectedGame
         if(gameToJoin.length === 0){
             gameToJoin.push(game)
             console.log(gameToJoin)
@@ -45,6 +41,7 @@ io.on('connection', (socket) => {
             let removed = gameToJoin.pop()
             gameToJoin.push(game)
             console.log(gameToJoin)
+            console.log(removed)
         } 
     })
     socket.on('queue', () => {
@@ -96,6 +93,24 @@ io.on('connection', (socket) => {
             }
 
         }
+    })
+    socket.on('leaveQueue', () => {
+        queueChess.forEach(e => {
+            if(e === socket.id){
+                queueChess.splice(e,1)
+            }
+        })
+        queueTicTacToe.forEach(e => {
+            if(e === socket.id){
+                queueChess.splice(e,1)
+            }
+        })
+        queueCheckers.forEach(e => {
+            if(e === socket.id){
+                queueChess.splice(e,1)
+            }
+        })
+        console.log(queueChess,queueTicTacToe,queueCheckers)
     })
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} left`)
