@@ -32,17 +32,14 @@ function Socket (props) {
       let chessGame = () => {
         setSelectedGame('Chess')
         let game = selectedGame
-        socket.emit('selectedGame',game)
       }
       let checkersGame = () => {
         setSelectedGame('Checkers')
         let game = selectedGame
-        socket.emit('selectedGame',game)
       }
       let tictactoeGame = () => {
         setSelectedGame('Tic-Tac-Toe')
         let game = selectedGame
-        socket.emit('selectedGame',game)
       }
       let leaveQueueDisplay = () => {
         if(leaveQueue === false){
@@ -84,7 +81,7 @@ function Socket (props) {
             {leaveQueue === false?(
           <button 
             className="profile-button"
-            onClick={() => socket.emit('queue',leaveQueueDisplay())}>
+            onClick={() => socket.emit('queue',selectedGame,leaveQueueDisplay())}>
                 Join Queue
           </button>
 

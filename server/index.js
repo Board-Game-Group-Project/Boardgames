@@ -32,21 +32,9 @@ io.on('connection', (socket) => {
             rooms.push(serverID)
             console.log(`User ${serverID} has connected`)
     })
-    socket.on('selectedGame', function(selectedGame){
-        let game = selectedGame
-        if(gameToJoin.length === 0){
-            gameToJoin.push(game)
-            console.log(gameToJoin)
-        }else{
-            let removed = gameToJoin.pop()
-            gameToJoin.push(game)
-            console.log(gameToJoin)
-            console.log(removed)
-        } 
-    })
-    socket.on('queue', () => {
-        let game = gameToJoin.pop()
-        if(game === 'Chess'){
+    socket.on('queue', function(game){
+        let selectedGame = game
+        if(selectedGame === 'Chess'){
             if(queueChess.length !== 0){
                 var opponent = queueChess.pop()
                 console.log(`Connected to ${opponent.id}`)
@@ -61,7 +49,7 @@ io.on('connection', (socket) => {
                console.log('No one in Chess queue')
                 queueChess.push(socket)
             }
-        }else if(game === 'Checkers'){
+        }else if(selectedGame === 'Checkers'){
             if(queueCheckers.length !== 0){
                 var opponent = queueChess.pop()
                 console.log(`Connected to ${opponent.id}`)
@@ -76,7 +64,7 @@ io.on('connection', (socket) => {
                console.log('No one in Checkers queue')
                 queueCheckers.push(socket)
             }
-        }else if(game === 'Tic-Tac-Toe'){
+        }else if(selectedGame === 'Tic-Tac-Toe'){
             if(queueTicTacToe.length !== 0){
                 var opponent = queueTicTacToe.pop()
                 console.log(`Connected to ${opponent.id}`)
