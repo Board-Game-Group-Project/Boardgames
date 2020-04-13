@@ -15,7 +15,7 @@ ul {
   margin-bottom: 10px;
 }
 
-.square {
+.block {
   background: rgb(38, 169, 212);
   border: 1px solid black;
   float: left;
