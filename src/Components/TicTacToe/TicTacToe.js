@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client'; 
 import './TicTacToe.css'
 
 function Block(props) {
@@ -16,20 +17,33 @@ class Board extends Component {
         this.state = {
             squares: Array(9).fill(null),
             xIsNext: true,
+            myTurn:true,
+            socket:io("http://localhost:4420"),
+            char:''
         }
+    }
+    componentDidMount(){
+        this.state.socket.emit('ticTacToeRoom');
     }
 
+
+
     handleClick(i) {
-        const squares = this.state.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
-            return;
+        if(this.state.myTurn === true){
+            const squares = this.state.squares.slice();
+            if (calculateWinner(squares) || squares[i]) {
+                return;
+            }
+            squares[i] = this.state.xIsNext ? 'X' : 'O';
+            this.setState({
+                squares: squares,
+                xIsNext: !this.state.xIsNext,
+            });
+        }else{
+            console.log('not ur turn')
         }
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({
-            squares: squares,
-            xIsNext: !this.state.xIsNext,
-        });
     }
+    
 
     renderSquare(i) {
         return (
@@ -41,6 +55,16 @@ class Board extends Component {
     }
 
     render() {
+        this.state.socket.on('setX',() => {
+            this.setState({char:'X'})
+            console.log(this.state.char)
+        })
+        this.state.socket.on('setO',() => {
+            this.setState({char:'O'})
+            console.log(this.state.char)
+            
+        })
+        
         const winner = calculateWinner(this.state.squares);
         let status;
         if (winner) {
@@ -48,7 +72,6 @@ class Board extends Component {
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
-
         return (
             <div>
                 <div className="status">{status}</div>
@@ -67,6 +90,7 @@ class Board extends Component {
                     {this.renderSquare(7)}
                     {this.renderSquare(8)}
                 </div>
+                <button onClick={() => this.state.socket.emit('test')}></button>
             </div>
         );
     }
