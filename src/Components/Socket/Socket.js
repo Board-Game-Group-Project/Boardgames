@@ -1,21 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import io from 'socket.io-client';
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 function Socket (props) {
-    const [rooms, setRooms] = useState([]);
     const [user, setUser] = useState('');
     const [gameList,setGameList] = useState(false);
     const [selectedGame,setSelectedGame] = useState('Chess');
     const [leaveQueue,setLeaveQueue] = useState(false);
     const [state, setState] = useState({
         username: "",
-        message: "",
-        chat: [],
         endpoint: "http://localhost:4420",
       });
     
-      const [socket, setSocket] = useState(io(state.endpoint));
+      const [socket] = useState(io(state.endpoint));
     
       useEffect(() => {
         socket.on('connect', () => join())

@@ -74,12 +74,8 @@ io.on('connection', (socket) => {
                 var opponent = queueTicTacToe.pop()
                 console.log(`Connected to ${opponent.id}`)
                 var ticTacToeRoom = `${socket.id}` + '' + `${opponent.id}`
-                socket.join(ticTacToeRoom, () => {
-                    console.log(socket.rooms)
-                })
-                opponent.join(ticTacToeRoom, () => {
-                    console.log(opponent.rooms)
-                })
+                socket.join(ticTacToeRoom)
+                opponent.join(ticTacToeRoom)
                 rooms.push(ticTacToeRoom)
                 socket.to(ticTacToeRoom).emit('joinTicTacToe');
                 socket.emit('joinTicTacToe')
@@ -91,11 +87,9 @@ io.on('connection', (socket) => {
 
         }
     })
+    
     socket.on('leaveQueue', () => {
-        console.log(queueChess.length)
         queueChess.forEach(e => {
-            console.log(e.id)
-            console.log(socket.id)
             if(e.id === socket.id){
                 queueChess.pop()
             }
@@ -117,14 +111,17 @@ io.on('connection', (socket) => {
         if(ticTactToeJoin.length === 2){
             let user = ticTactToeJoin.pop()
             let opponent = ticTactToeJoin.pop()
-            var room = `${user.id}` + `${user.id}`
+            var room = `${user.id}` + `${opponent.id}`
             socket.join(room)
             opponent.join(room)
-            socket.emit('setX')
-        }else{
-            socket.emit('setO')
+            game = io.of(`${room}`)
+            socket.emit('setX', room)
+            opponent.emit('setO', room)
+            game.emit('connect')   
         }
     })
+    
+    
     
     socket.on('leaveGame', () => {
         console.log(socket.id)

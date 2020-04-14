@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client'; 
 import './TicTacToe.css'
+import { connect } from 'react-redux';
 
 function Block(props) {
     return (
@@ -17,9 +18,9 @@ class Board extends Component {
         this.state = {
             squares: Array(9).fill(null),
             xIsNext: true,
-            myTurn:true,
+            myTurn:null,
             socket:io("http://localhost:4420"),
-            char:''
+            char:'',
         }
     }
     componentDidMount(){
@@ -34,13 +35,16 @@ class Board extends Component {
             if (calculateWinner(squares) || squares[i]) {
                 return;
             }
-            squares[i] = this.state.xIsNext ? 'X' : 'O';
+            squares[i] = this.state.char;
             this.setState({
                 squares: squares,
                 xIsNext: !this.state.xIsNext,
             });
-        }else{
-            console.log('not ur turn')
+            this.setState({myTurn:false})
+            if(this.state.nameSpaceSet === false){
+                this.setState({nameSpaceSet:true})
+                this.state.socket.emit('tictacToeSetNamespace')
+            }
         }
     }
     
@@ -55,15 +59,22 @@ class Board extends Component {
     }
 
     render() {
-        this.state.socket.on('setX',() => {
-            this.setState({char:'X'})
-            console.log(this.state.char)
+        this.state.socket.on('setX',(room) => {
+            this.setState({char:'X',myTurn:true,})
         })
-        this.state.socket.on('setO',() => {
-            this.setState({char:'O'})
-            console.log(this.state.char)
-            
+        this.state.socket.on('setO',(room) => {
+            this.setState({char:'O',myTurn:false,})
+            console.log(this.state.socket.id)
         })
+        this.state.socket.on('ticTacToeSetTurn', () => {
+            this.setState({myTurn:true})
+            console.log('Next turn hit')
+        })
+        this.state.socket.on('connect',() => {
+            console.log('hit')
+        })
+        
+        
         
         const winner = calculateWinner(this.state.squares);
         let status;
@@ -75,6 +86,7 @@ class Board extends Component {
         return (
             <div>
                 <div className="status">{status}</div>
+                <p>You're player: {this.state.char}</p>
                 <div className="board-row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
@@ -90,7 +102,6 @@ class Board extends Component {
                     {this.renderSquare(7)}
                     {this.renderSquare(8)}
                 </div>
-                <button onClick={() => this.state.socket.emit('test')}></button>
             </div>
         );
     }
@@ -129,6 +140,12 @@ function calculateWinner(squares) {
     }
     return null;
 }
+const mapStateToProps = reduxState => {
+    return {
+      player: reduxState.playerReducer.player,
+  
+    };
+  };
 
 
-export default Game
+export default connect(mapStateToProps)(Game)
