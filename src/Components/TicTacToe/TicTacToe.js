@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client'; 
 import './TicTacToe.css'
 
 function Block(props) {
@@ -16,20 +17,40 @@ class Board extends Component {
         this.state = {
             squares: Array(9).fill(null),
             xIsNext: true,
+            myTurn:null,
+            socket:io("http://localhost:4420"),
+            socketConnect:false,
+            inQueue:false,
+            xOrO:'',
+            p1:false,
+            room:null
         }
+    }
+    componentDidMount(){
+        let socket = this.state.socket
+        socket.emit('join');
     }
 
+
+
     handleClick(i) {
-        const squares = this.state.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
-            return;
+        if(this.state.myTurn === true){
+            const squares = this.state.squares.slice();
+            if (calculateWinner(squares) || squares[i]) {
+                return;
+            }
+            squares[i] = this.state.xOrO;
+            this.setState({
+                squares: squares,
+                xIsNext: !this.state.xIsNext,
+            });
+            this.setState({myTurn:false})
+            this.state.socket.emit('tttNextTurn', squares, this.state.room)
+
+            
         }
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({
-            squares: squares,
-            xIsNext: !this.state.xIsNext,
-        });
     }
+    
 
     renderSquare(i) {
         return (
@@ -43,15 +64,54 @@ class Board extends Component {
     render() {
         const winner = calculateWinner(this.state.squares);
         let status;
+        let socket = this.state.socket
         if (winner) {
             status = 'Winner: ' + winner;
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
 
+        let queue = () => {
+            this.setState({inQueue:!this.state.inQueue})
+        }
+
+        socket.on('tttRoomJoined',(room) => {
+            this.setState({socketConnect:true,room:room})
+            socket.emit('tttSetPlayers')
+        })
+        socket.on('setX', () => {
+            this.setState({xOrO:'X',myTurn:true,p1:true})
+        })
+        socket.on('setO', () => {
+            this.setState({xOrO:'O',myTurn:true})
+        })
+        socket.on('nextTurn',(playerBoard) => {
+            let newBoard = playerBoard
+            this.setState({board:newBoard,myTurn:true})
+            console.log(newBoard)
+            console.log(this.state.board)
+        })
+
         return (
+            <>
+            {this.state.socketConnect === false ? (
+                <>
+                {this.state.inQueue === false? (
+                <div>
+                    <h1>JOIN QUEUE</h1>
+                    <button onClick={() => socket.emit('tttQueue',queue())}>Join Queue</button>
+                </div>
+                ):(
+                    <div>
+                        <h1>LEAVE QUEUE</h1>
+                        <button onClick={() => socket.emit('leaveQueue',queue())}>Leave Queue</button>
+                    </div>
+                )}
+                </>
+            ):(
             <div>
                 <div className="status">{status}</div>
+                <p>You're player: {this.state.xOrO}</p>
                 <div className="board-row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
@@ -68,6 +128,8 @@ class Board extends Component {
                     {this.renderSquare(8)}
                 </div>
             </div>
+            )}
+            </>
         );
     }
 }
@@ -105,6 +167,7 @@ function calculateWinner(squares) {
     }
     return null;
 }
+
 
 
 export default Game

@@ -1,17 +1,16 @@
-import io from 'socket.io-client'
-let socket = io('localhost:4420')
+import Axios from "axios";
 
 const initialState = {
-    socketInfo: [0,1,2,3]
+    socket:'testytest'
 }
-const TEST = 'TEST';
+const ROOM = 'ROOM';
 
-export function test() {
-    let action = {
-        type:TEST,
-        payload:initialState.socketInfo
+export function joinRoomTTT(){
+    return{
+        type:ROOM,
+        payload:Axios.get('/api/createroom',)
     }
-    return action
+        
 }
 
 export default function reducer(state=initialState, action){
@@ -21,14 +20,11 @@ export default function reducer(state=initialState, action){
     const {type,payload} = action
 
     switch(type) {
-        case TEST + '_PENDING':
-            console.log('hit')
+        case ROOM + '_PENDING':
             return {...state, loading: true, error: false}
-        case TEST + '_FULFILLED':
-            console.log(payload)
-            return {...state, loading: false, socketInfo: payload.data }
-        case TEST + '_REJECTED':
-            console.log('hit')
+        case ROOM + '_FULFILLED':
+            return {...state, loading: false, socket:payload.socket }
+        case ROOM + '_REJECTED':
             return {...state, loading: false, error: true, errorMessage: action.payload.response.data}
         default:
             return {...state};

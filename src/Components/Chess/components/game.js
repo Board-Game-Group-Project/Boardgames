@@ -3,6 +3,7 @@ import React from 'react';
 import '../Chess.css'
 import Board from './board.js';
 import initialiseChessBoard from '../helpers/board-initialiser.js';
+import io from 'socket.io-client'
 
 export default class Game extends React.Component {
   constructor() {
@@ -12,9 +13,18 @@ export default class Game extends React.Component {
       player: 1,
       sourceSelection: -1,
       status: '',
-      turn: 'white'
+      turn: 'white',
+      socket:io("http://localhost:4420"),
+      socketConnect:false,
+      inQueue:false,
+      room:null
     }
   }
+
+  componentDidMount(){
+    let socket = this.state.socket
+    socket.emit('join');
+}
 
   handleClick(i) {
     const squares = this.state.squares.slice();
@@ -90,8 +100,29 @@ export default class Game extends React.Component {
   }
 
   render() {
-
+    let queue = () => {
+      this.setState({inQueue:!this.state.inQueue})
+  }
+  this.state.socket.on('roomJoined',(room) => {
+    this.setState({socketConnect:true,room:room})
+})
     return (
+      <>
+      {this.state.socketConnect === false ? (
+                <>
+                {this.state.inQueue === false? (
+                <div>
+                    <h1>JOIN QUEUE</h1>
+                    <button onClick={() => this.state.socket.emit('chessQueue',queue())}>Join Queue</button>
+                </div>
+                ):(
+                    <div>
+                        <h1>LEAVE QUEUE</h1>
+                        <button onClick={() => this.state.socket.emit('leaveQueue',queue())}>Leave Queue</button>
+                    </div>
+                )}
+                </>
+            ):(
       <div style={{ marginLeft: '400px', marginTop: '100px' }}>
         <div className="game">
           <div className="game-board">
@@ -106,14 +137,10 @@ export default class Game extends React.Component {
 
             </div>
             <div className="game-status">{this.state.status}</div>
-
-
           </div>
         </div>
-
-
-
-      </div>
+      </div>)}
+      </>
 
 
     );
