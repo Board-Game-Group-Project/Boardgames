@@ -16,7 +16,7 @@ export default class Game extends React.Component {
       status: '',
       turn: 'white',
       victory: 'test',
-      turn: 'white',
+      turn: false,
       socket: io("http://localhost:4420"),
       socketConnect: false,
       inQueue: false,
@@ -107,12 +107,12 @@ export default class Game extends React.Component {
             }
             squares[i] = squares[this.state.sourceSelection];
             squares[this.state.sourceSelection] = null;
-            let player = this.state.player === 1 ? 2 : 1;
+            // let player = this.state.player === 1 ? 2 : 1;
             let turn = this.state.turn === 'white' ? 'black' : 'white';
             this.setState({
               sourceSelection: -1,
               squares: squares,
-              player: player,
+              // player: player,
               status: '',
               turn: turn
             });
@@ -143,11 +143,21 @@ export default class Game extends React.Component {
 
 
   render() {
+    let socket = this.state.socket
     let queue = () => {
       this.setState({ inQueue: !this.state.inQueue })
     }
-    this.state.socket.on('roomJoined', (room) => {
+    socket.on('roomJoined', (room) => {
       this.setState({ socketConnect: true, room: room })
+      socket.emit('chessSetPlayers',this.state.room)
+    })
+    socket.on('setWhite',() => {
+      this.setState({player:1,})
+      console.log(this.state.player)
+    })
+    socket.on('setBlack', () => {
+      this.setState({player:2,})
+      console.log(this.state.player)
     })
     return (
       <>
@@ -166,6 +176,8 @@ export default class Game extends React.Component {
               )}
           </>
         ) : (
+          <>
+          <p>Player:{this.state.player}</p>
             <div style={{ marginLeft: '400px', marginTop: '100px' }}>
               <div className="game">
                 <div className="game-board">
@@ -182,7 +194,10 @@ export default class Game extends React.Component {
                   <div className="game-status">{this.state.status}</div>
                 </div>
               </div>
-            </div>)}
+            </div>
+          </>
+          )}
+            <button onClick={() => console.log(this.state.player)}>TEST</button>
       </>
 
 

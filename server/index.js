@@ -17,6 +17,7 @@ const io = socketIo(server)
 const rooms = [];
 const queueChess = [];
 const chessRooms = [];
+const chessJoin = [];
 const queueCheckers = [];
 const queueTicTacToe = [];
 const tttRooms = [];
@@ -68,6 +69,17 @@ io.on('connection', (socket) => {
             queueChess.push(socket)
         }
     })
+    socket.on('chessSetPlayers', () => {
+        const room = chessJoin
+        if(room.length <= 0){
+            socket.emit('setWhite')
+            chessJoin.push(321)
+        }else{
+            let deletedPlayer = chessJoin.pop()
+            delete deletedPlayer
+            socket.emit('setBlack')
+        }
+    })
 
     // TicTacToe Socket Stuff
     socket.on('tttQueue', () => {
@@ -106,6 +118,21 @@ io.on('connection', (socket) => {
     })
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} left`)
+        queueChess.forEach(e => {
+            if(e.id === socket.id){
+                queueChess.pop()
+            }
+        })
+        queueTicTacToe.forEach(e => {
+            if(e.id === socket.id){
+                queueTicTacToe.pop()
+            }
+        })
+        queueCheckers.forEach(e => {
+            if(e.id === socket.id){
+                queueCheckers.pop()
+            }
+        })
     })
 })
 
