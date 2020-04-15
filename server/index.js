@@ -18,7 +18,8 @@ const rooms = [];
 const queueChess = [];
 const queueCheckers = [];
 const queueTicTacToe = [];
-const ticTactToeJoin = [];
+const tttRooms = [];
+const tttJoin = [];
 
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/index.js')
@@ -114,16 +115,29 @@ io.on('connection', (socket) => {
             var tttRoom = `${player1.id}` + '' + `${player2.id}`
             player1.join(tttRoom)
             player2.join(tttRoom)
-            socket.to(tttRoom).emit('tttRoomJoined')
-            player1.emit('tttRoomJoined')
+            tttRooms.push({player1,player2,tttRoom})
+            socket.to(tttRoom).emit('tttRoomJoined',tttRoom)
+            player1.emit('tttRoomJoined',tttRoom)
        }else{
            console.log('No one in TicTacToe queue')
             queueTicTacToe.push(socket)
         }
     })
-    
-    
-    
+    socket.on('tttSetPlayers', () => {
+        const room = tttJoin
+        if(room.length <= 0){
+            socket.emit('setX')
+            room.push(123)
+        }else{
+            socket.emit('setO')
+            let removedPlayer = room.pop()
+            delete removedPlayer
+        }
+    })
+    socket.on('tttNextTurn', function(board,room){
+        socket.to(room).emit('nextTurn',board)
+    })
+
     socket.on('leaveGame', () => {
         console.log(socket.id)
     })

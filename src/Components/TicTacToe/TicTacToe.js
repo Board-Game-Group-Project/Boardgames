@@ -21,7 +21,9 @@ class Board extends Component {
             socket:io("http://localhost:4420"),
             socketConnect:false,
             inQueue:false,
-            char:'',
+            xOrO:'',
+            p1:false,
+            room:null
         }
     }
     componentDidMount(){
@@ -37,15 +39,15 @@ class Board extends Component {
             if (calculateWinner(squares) || squares[i]) {
                 return;
             }
-            squares[i] = this.state.char;
+            squares[i] = this.state.xOrO;
             this.setState({
                 squares: squares,
                 xIsNext: !this.state.xIsNext,
             });
             this.setState({myTurn:false})
-            if(this.state.nameSpaceSet === false){
-                this.setState({nameSpaceSet:true})
-            }
+            this.state.socket.emit('tttNextTurn', squares, this.state.room)
+
+            
         }
     }
     
@@ -73,8 +75,21 @@ class Board extends Component {
             this.setState({inQueue:!this.state.inQueue})
         }
 
-        socket.on('tttRoomJoined',() => {
-            this.setState({socketConnect:true})
+        socket.on('tttRoomJoined',(room) => {
+            this.setState({socketConnect:true,room:room})
+            socket.emit('tttSetPlayers')
+        })
+        socket.on('setX', () => {
+            this.setState({xOrO:'X',myTurn:true,p1:true})
+        })
+        socket.on('setO', () => {
+            this.setState({xOrO:'O',myTurn:true})
+        })
+        socket.on('nextTurn',(playerBoard) => {
+            let newBoard = playerBoard
+            this.setState({board:newBoard,myTurn:true})
+            console.log(newBoard)
+            console.log(this.state.board)
         })
 
         return (
@@ -96,7 +111,7 @@ class Board extends Component {
             ):(
             <div>
                 <div className="status">{status}</div>
-                <p>You're player: {this.state.char}</p>
+                <p>You're player: {this.state.xOrO}</p>
                 <div className="board-row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
