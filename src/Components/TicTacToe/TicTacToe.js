@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client'; 
 import './TicTacToe.css'
-import { connect } from 'react-redux';
 
 function Block(props) {
     return (
@@ -20,11 +19,14 @@ class Board extends Component {
             xIsNext: true,
             myTurn:null,
             socket:io("http://localhost:4420"),
+            socketConnect:false,
+            inQueue:false,
             char:'',
         }
     }
     componentDidMount(){
-        this.state.socket.emit('ticTacToeRoom');
+        let socket = this.state.socket
+        socket.emit('join');
     }
 
 
@@ -43,7 +45,6 @@ class Board extends Component {
             this.setState({myTurn:false})
             if(this.state.nameSpaceSet === false){
                 this.setState({nameSpaceSet:true})
-                this.state.socket.emit('tictacToeSetNamespace')
             }
         }
     }
@@ -59,31 +60,40 @@ class Board extends Component {
     }
 
     render() {
-        this.state.socket.on('setX',(room) => {
-            this.setState({char:'X',myTurn:true,})
-        })
-        this.state.socket.on('setO',(room) => {
-            this.setState({char:'O',myTurn:false,})
-            console.log(this.state.socket.id)
-        })
-        this.state.socket.on('ticTacToeSetTurn', () => {
-            this.setState({myTurn:true})
-            console.log('Next turn hit')
-        })
-        this.state.socket.on('connect',() => {
-            console.log('hit')
-        })
-        
-        
-        
         const winner = calculateWinner(this.state.squares);
         let status;
+        let socket = this.state.socket
         if (winner) {
             status = 'Winner: ' + winner;
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
+
+        let queue = () => {
+            this.setState({inQueue:!this.state.inQueue})
+        }
+
+        socket.on('tttRoomJoined',() => {
+            this.setState({socketConnect:true})
+        })
+
         return (
+            <>
+            {this.state.socketConnect === false ? (
+                <>
+                {this.state.inQueue === false? (
+                <div>
+                    <h1>JOIN QUEUE</h1>
+                    <button onClick={() => socket.emit('tttQueue',queue())}>Join Queue</button>
+                </div>
+                ):(
+                    <div>
+                        <h1>LEAVE QUEUE</h1>
+                        <button onClick={() => socket.emit('leaveQueue',queue())}>Leave Queue</button>
+                    </div>
+                )}
+                </>
+            ):(
             <div>
                 <div className="status">{status}</div>
                 <p>You're player: {this.state.char}</p>
@@ -103,6 +113,8 @@ class Board extends Component {
                     {this.renderSquare(8)}
                 </div>
             </div>
+            )}
+            </>
         );
     }
 }
@@ -140,12 +152,7 @@ function calculateWinner(squares) {
     }
     return null;
 }
-const mapStateToProps = reduxState => {
-    return {
-      player: reduxState.playerReducer.player,
-  
-    };
-  };
 
 
-export default connect(mapStateToProps)(Game)
+
+export default Game

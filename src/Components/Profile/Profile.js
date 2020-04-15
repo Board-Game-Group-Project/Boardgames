@@ -124,7 +124,7 @@ function Profile (props) {
           </div>
         </div>
       </div>
-      <Socket/>
+      {/* <Socket/> */}
       <LeaveGame/>
     </div>
   )

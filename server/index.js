@@ -106,18 +106,19 @@ io.on('connection', (socket) => {
         })
     })
     // TicTacToe Socket Stuff
-    socket.on('ticTacToeRoom', () => {
-        ticTactToeJoin.push(socket)
-        if(ticTactToeJoin.length === 2){
-            let user = ticTactToeJoin.pop()
-            let opponent = ticTactToeJoin.pop()
-            var room = `${user.id}` + `${opponent.id}`
-            socket.join(room)
-            opponent.join(room)
-            game = io.of(`${room}`)
-            socket.emit('setX', room)
-            opponent.emit('setO', room)
-            game.emit('connect')   
+    socket.on('tttQueue', () => {
+        if(queueTicTacToe.length !== 0){
+            var player1 = socket
+            var player2 = queueTicTacToe.pop()
+            console.log(`Connected to ${player2.id}`)
+            var tttRoom = `${player1.id}` + '' + `${player2.id}`
+            player1.join(tttRoom)
+            player2.join(tttRoom)
+            socket.to(tttRoom).emit('tttRoomJoined')
+            player1.emit('tttRoomJoined')
+       }else{
+           console.log('No one in TicTacToe queue')
+            queueTicTacToe.push(socket)
         }
     })
     
