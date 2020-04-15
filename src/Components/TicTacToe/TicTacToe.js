@@ -33,6 +33,7 @@ class Board extends Component {
 
 
 
+
     handleClick(i) {
         if(this.state.myTurn === true){
             const squares = this.state.squares.slice();
