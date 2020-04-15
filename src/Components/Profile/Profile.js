@@ -1,8 +1,6 @@
 import React, {useState} from "react";
 import { connect } from "react-redux";
 import { login, deletePlayer, editPlayer } from "../../ducks/playerReducer";
-import Socket from '../Socket/Socket'
-import LeaveGame from '../LeaveGame/LeaveGame'
 import './Profile.css'
 
 function Profile (props) {
@@ -124,8 +122,6 @@ function Profile (props) {
           </div>
         </div>
       </div>
-      {/* <Socket/> */}
-      <LeaveGame/>
     </div>
   )
 }

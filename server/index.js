@@ -16,6 +16,7 @@ const io = socketIo(server)
 
 const rooms = [];
 const queueChess = [];
+const chessRooms = [];
 const queueCheckers = [];
 const queueTicTacToe = [];
 const tttRooms = [];
@@ -106,6 +107,24 @@ io.on('connection', (socket) => {
             }
         })
     })
+    // Chess Socket Stuff
+    socket.on('chessQueue', () => {
+        if(queueChess.length !== 0){
+            var player1 = socket
+            var player2 = queueChess.pop()
+            console.log(`Connected to ${player2.id}`)
+            var chessRoom = `${player1.id}` + '' + `${player2.id}`
+            player1.join(chessRoom)
+            player2.join(chessRoom)
+            chessRooms.push({player1,player2,chessRoom})
+            socket.to(chessRoom).emit('roomJoined',chessRoom)
+            player1.emit('roomJoined',chessRoom)
+       }else{
+           console.log('No one in Chess queue')
+            queueChess.push(socket)
+        }
+    })
+
     // TicTacToe Socket Stuff
     socket.on('tttQueue', () => {
         if(queueTicTacToe.length !== 0){
