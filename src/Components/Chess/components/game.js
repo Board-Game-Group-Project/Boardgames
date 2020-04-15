@@ -65,8 +65,12 @@ export default class Game extends React.Component {
   }
 
   handleClick(i) {
+    if(this.state.turn === true){
+
+    
     if (this.state.victory === 'test') {
       const squares = this.state.squares.slice();
+      
 
       if (this.state.sourceSelection === -1) {
         if (!squares[i] || squares[i].player !== this.state.player) {
@@ -118,6 +122,7 @@ export default class Game extends React.Component {
             });
             this.isKingDead()
           }
+        
           else {
             this.setState({
               status: "Wrong selection. Choose valid source and destination again.",
@@ -127,7 +132,13 @@ export default class Game extends React.Component {
         }
       }
     } else { this.setState({ status: 'The game is already won' }) }
+  }else{
+    this.setState({status:"It's not your turn!"})
   }
+
+  }
+
+  
 
 
   isMoveLegal(srcToDestPath) {
@@ -152,11 +163,11 @@ export default class Game extends React.Component {
       socket.emit('chessSetPlayers',this.state.room)
     })
     socket.on('setWhite',() => {
-      this.setState({player:1,})
+      this.setState({player:1,turn:true})
       console.log(this.state.player)
     })
     socket.on('setBlack', () => {
-      this.setState({player:2,})
+      this.setState({player:2,turn:false})
       console.log(this.state.player)
     })
     return (
