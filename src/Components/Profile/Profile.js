@@ -54,18 +54,14 @@ function Profile(props) {
                       placeholder="enter your email"
                       onChange={e => setEmail(e.target.value)}
                     ></input>
-                    <button
-                      className='profile-button'
-                      type="submit"
-                    >
+                    <Button variant="contained" color="primary" type='submit'>
                       SAVE CHANGES
-                  </button>
-                    <button
-                      className='profile-button'
-                      onClick={() => setEditing(false)}
-                    >
+      </Button>
+
+
+                    <Button variant="contained" color="primary" onClick={() => setEditing(false)} style={{ marginTop: '5px' }}>
                       CANCEL
-                  </button>
+      </Button>
                   </form>
                 )
             }
@@ -74,12 +70,11 @@ function Profile(props) {
             {
               (deleting === false) ? (
                 <div>
-                  <button
-                    className='profile-button'
-                    onClick={() => setDeleting(true)}
-                  >
+                  <Button variant="contained" color="primary" onClick={() => setDeleting(true)}>
+
                     DELETE ACCOUNT
-                  </button>
+      </Button>
+
                 </div>
               ) : (
                   <form
@@ -103,18 +98,13 @@ function Profile(props) {
                       placeholder="enter your password"
                       onChange={e => setPassword(e.target.value)}
                     ></input>
-                    <button
-                      className='profile-button'
-                      type="submit"
-                    >
+                    <Button variant="contained" color="primary" type='submit'>
                       DELETE ACCOUNT
-                  </button>
-                    <button
-                      className='profile-button'
-                      onClick={() => setDeleting(false)}
-                    >
+      </Button>
+                    <Button variant="contained" color="primary" onClick={() => setDeleting(false)} style={{ marginTop: '5px' }}>
                       CANCEL
-                  </button>
+      </Button>
+
                   </form>
                 )
             }

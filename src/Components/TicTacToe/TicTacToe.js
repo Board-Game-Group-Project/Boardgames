@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client'; 
+import io from 'socket.io-client';
 import './TicTacToe.css'
 
 function Block(props) {
@@ -17,16 +17,16 @@ class Board extends Component {
         this.state = {
             squares: Array(9).fill(null),
             xIsNext: true,
-            myTurn:null,
-            socket:io("http://localhost:4420"),
-            socketConnect:false,
-            inQueue:false,
-            xOrO:'',
-            p1:false,
-            room:null
+            myTurn: null,
+            socket: io("http://localhost:4420"),
+            socketConnect: false,
+            inQueue: false,
+            xOrO: '',
+            p1: false,
+            room: null
         }
     }
-    componentDidMount(){
+    componentDidMount() {
         let socket = this.state.socket
         socket.emit('join');
     }
@@ -35,7 +35,7 @@ class Board extends Component {
 
 
     handleClick(i) {
-        if(this.state.myTurn === true){
+        if (this.state.myTurn === true) {
             const squares = this.state.squares.slice();
             if (calculateWinner(squares) || squares[i]) {
                 return;
@@ -45,13 +45,13 @@ class Board extends Component {
                 squares: squares,
                 xIsNext: !this.state.xIsNext,
             });
-            this.setState({myTurn:false})
+            this.setState({ myTurn: false })
             this.state.socket.emit('tttNextTurn', squares, this.state.room)
 
-            
+
         }
     }
-    
+
 
     renderSquare(i) {
         return (
@@ -73,63 +73,64 @@ class Board extends Component {
         }
 
         let queue = () => {
-            this.setState({inQueue:!this.state.inQueue})
+            this.setState({ inQueue: !this.state.inQueue })
         }
 
-        socket.on('tttRoomJoined',(room) => {
-            this.setState({socketConnect:true,room:room})
+        socket.on('tttRoomJoined', (room) => {
+            this.setState({ socketConnect: true, room: room })
             socket.emit('tttSetPlayers')
         })
         socket.on('setX', () => {
-            this.setState({xOrO:'X',myTurn:true,p1:true})
+            this.setState({ xOrO: 'X', myTurn: true, p1: true })
         })
         socket.on('setO', () => {
-            this.setState({xOrO:'O',myTurn:true})
+            this.setState({ xOrO: 'O', myTurn: true })
         })
-        socket.on('nextTurn',(playerBoard) => {
+        socket.on('nextTurn', (playerBoard) => {
             let newBoard = playerBoard
-            this.setState({board:newBoard,myTurn:true})
+            this.setState({ board: newBoard, myTurn: true })
             console.log(newBoard)
             console.log(this.state.board)
         })
 
         return (
             <>
-            {this.state.socketConnect === false ? (
-                <>
-                {this.state.inQueue === false? (
-                <div>
-                    <h1>JOIN QUEUE</h1>
-                    <button onClick={() => socket.emit('tttQueue',queue())}>Join Queue</button>
-                </div>
-                ):(
-                    <div>
-                        <h1>LEAVE QUEUE</h1>
-                        <button onClick={() => socket.emit('leaveQueue',queue())}>Leave Queue</button>
-                    </div>
-                )}
-                </>
-            ):(
-            <div>
-                <div className="status">{status}</div>
-                <p>You're player: {this.state.xOrO}</p>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
-            )}
+                {this.state.socketConnect === false ? (
+                    <>
+                        {this.state.inQueue === false ? (
+                            <div>
+                                <h1 style={{ color: 'white' }}>JOIN QUEUE</h1>
+                                <button onClick={() => socket.emit('tttQueue', queue())}>Join Queue</button>
+                            </div>
+                        ) : (
+                                <div>
+                                    <h1 style={{ color: 'white' }}>LEAVE QUEUE</h1>
+                                    <button onClick={() => socket.emit('leaveQueue', queue())}>Leave Queue</button>
+                                </div>
+                            )}
+                    </>
+                ) : (
+                        <div>
+                            <div className="status">{status}</div>
+                            <p style={{ color: 'white' }}>You're player: {this.state.xOrO}</p>
+                            <div className="board-row">
+                                {this.renderSquare(0)}
+                                {this.renderSquare(1)}
+                                {this.renderSquare(2)}
+                            </div>
+                            <div className="board-row">
+                                {this.renderSquare(3)}
+                                {this.renderSquare(4)}
+                                {this.renderSquare(5)}
+                            </div>
+                            <div className="board-row">
+                                {this.renderSquare(6)}
+                                {this.renderSquare(7)}
+                                {this.renderSquare(8)}
+                            </div>
+                        </div>
+                    )
+                }
             </>
         );
     }
