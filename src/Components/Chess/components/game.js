@@ -109,7 +109,6 @@ export default class Game extends React.Component {
 
           if (isMovePossible && isMoveLegal) {
             if (squares[i] !== null) {
-
             }
             squares[i] = squares[this.state.sourceSelection];
             squares[this.state.sourceSelection] = null;
@@ -123,14 +122,10 @@ export default class Game extends React.Component {
               turn: turn,
               kingDead:!this.state.kingDead
             });
-            if(this.state.turnInfo === 'White'){
-              this.setState({turnInfo:'Black'})
-            }else{
-              this.setState({turnInfo:'White'})
-            }
-            console.log(this.state.room)
+            let turnInfo = this.state.turnInfo === 'White' ? 'Black' : 'White';
+            this.setState({turnInfo:turnInfo})
 
-            this.state.socket.emit('chessNextTurn',this.state.room,this.state.board)
+            this.state.socket.emit('chessNextTurn',this.state.room,this.state.board,turnInfo)
 
             this.isKingDead()
           }
@@ -183,10 +178,9 @@ export default class Game extends React.Component {
     socket.on('setBlack', () => {
       this.setState({player:2,turn:false})
     })
-    socket.on('chessUpdateInfo', (newBoard) => {
-      this.setState({turn:true})
-      console.log('chess update hit')
-      
+    socket.on('chessUpdateInfo', (newBoard,turnInfo) => {
+      this.setState({turn:true,turnInfo:turnInfo})    
+      console.log('hit')  
     })
     return (
       <>
@@ -227,7 +221,6 @@ export default class Game extends React.Component {
             </div>
           </>
           )}
-            <button onClick={() => console.log(this.state.player)}>TEST</button>
       </>
 
 

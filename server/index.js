@@ -74,9 +74,9 @@ io.on('connection', (socket) => {
         socket.to(room).emit('setBlack')
                 
     })
-    socket.on('chessNextTurn', function(room,newBoard){
+    socket.on('chessNextTurn', function(room,newBoard,turnInfo){
         const player2 = room
-        socket.to(player2).emit('chessUpdateInfo',newBoard)
+        socket.to(player2).emit('chessUpdateInfo',newBoard,turnInfo)
     })
 
     // TicTacToe Socket Stuff
