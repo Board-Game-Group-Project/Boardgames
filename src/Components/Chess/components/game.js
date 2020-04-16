@@ -185,12 +185,8 @@ export default class Game extends React.Component {
     })
     socket.on('chessUpdateInfo', (newBoard) => {
       this.setState({turn:true})
-      if(this.state.turnInfo === 'White'){
-        this.setState({turnInfo:'Black'})
-      }else{
-        this.setState({turnInfo:'White'})
-      }
-      console.log('hit')
+      console.log('chess update hit')
+      
     })
     return (
       <>
