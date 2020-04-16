@@ -93,26 +93,21 @@ io.on('connection', (socket) => {
             player1.join(tttRoom)
             player2.join(tttRoom)
             tttRooms.push({player1,player2,tttRoom})
-            socket.to(tttRoom).emit('tttRoomJoined',tttRoom)
+            // socket.to(tttRoom).emit('tttRoomJoined',tttRoom)
             player1.emit('tttRoomJoined',tttRoom)
+            player1.emit('setX')
        }else{
            console.log('No one in TicTacToe queue')
             queueTicTacToe.push(socket)
         }
     })
-    socket.on('tttSetPlayers', () => {
-        const room = tttJoin
-        if(room.length <= 0){
-            socket.emit('setX')
-            room.push(123)
-        }else{
-            socket.emit('setO')
-            let removedPlayer = room.pop()
-            delete removedPlayer
-        }
+    socket.on('tttSetPlayers', (room) => {
+        console.log('hit')
+        socket.to(room).emit('tttOpponentJoin',room)
+        socket.to(room).emit('setO')
     })
-    socket.on('tttNextTurn', function(board,room){
-        socket.to(room).emit('nextTurn',board)
+    socket.on('tttNextTurn', function(board,room,turn){
+        socket.to(room).emit('nextTurn',board,turn)
     })
 
     socket.on('leaveGame', () => {

@@ -40,13 +40,14 @@ class Board extends Component {
             if (calculateWinner(squares) || squares[i]) {
                 return;
             }
+            const xIsNext =!this.state.xIsNext
             squares[i] = this.state.xOrO;
             this.setState({
                 squares: squares,
-                xIsNext: !this.state.xIsNext,
+                xIsNext: xIsNext,
             });
-            this.setState({ myTurn: false })
-            this.state.socket.emit('tttNextTurn', squares, this.state.room)
+            this.setState({myTurn:false})
+            this.state.socket.emit('tttNextTurn', squares, this.state.room, xIsNext)
 
 
         }
@@ -76,21 +77,23 @@ class Board extends Component {
             this.setState({ inQueue: !this.state.inQueue })
         }
 
-        socket.on('tttRoomJoined', (room) => {
-            this.setState({ socketConnect: true, room: room })
-            socket.emit('tttSetPlayers')
+        socket.on('tttRoomJoined',(room) => {
+            this.setState({socketConnect:true,room:room})
+            socket.emit('tttSetPlayers',(room))
+        })
+        socket.on('tttOpponentJoin',(room) => {
+            this.setState({socketConnect:true,room:room}) 
+            console.log('hit')
         })
         socket.on('setX', () => {
             this.setState({ xOrO: 'X', myTurn: true, p1: true })
         })
         socket.on('setO', () => {
-            this.setState({ xOrO: 'O', myTurn: true })
+            this.setState({xOrO:'O',myTurn:false})
         })
-        socket.on('nextTurn', (playerBoard) => {
+        socket.on('nextTurn',(playerBoard,turn) => {
             let newBoard = playerBoard
-            this.setState({ board: newBoard, myTurn: true })
-            console.log(newBoard)
-            console.log(this.state.board)
+            this.setState({squares:newBoard,myTurn:true,xIsNext:turn})
         })
 
         return (
