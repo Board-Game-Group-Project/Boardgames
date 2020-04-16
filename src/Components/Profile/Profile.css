@@ -8,7 +8,7 @@
   align-content: space-around;
   padding-left: 5vw;
   padding-right: 10vw;
-  color: #c0dee0;
+  color: black;
 }
 
 .player-info {
@@ -29,7 +29,7 @@
   justify-content: space-around;
   align-items: center;
   align-content: center;
-  background-color: rgba(52, 134, 170, 0.8);
+  background-color: #666666;
   font-size: larger;
 }
 
@@ -43,11 +43,15 @@
   align-content: stretch;
 }
 
-.editing-card:hover, .deleting-card:hover, .sockets-card:hover {
-  background: rgba(52, 134, 170, 0.6);
+.editing-card:hover,
+.deleting-card:hover,
+.sockets-card {
+  background: #666666;
 }
 
-.editing-card, .deleting-card, .sockets-card {
+.editing-card,
+.deleting-card,
+.sockets-card {
   margin: 2vh;
   display: flex;
   flex-direction: column;
@@ -58,7 +62,7 @@
   height: 25vh;
   width: 25vw;
   padding: 8px;
-  background-color: rgba(52, 134, 170, 0.8);
+  background-color: #666666;
 }
 
 .sockets-card {
@@ -109,5 +113,5 @@
 .profile-input {
   width: 15vw;
   height: 2vw;
-  margin-bottom: .5vw;
+  margin-bottom: 0.5vw;
 }

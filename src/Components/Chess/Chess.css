@@ -49,6 +49,7 @@ ul {
 
 .game-info {
   margin-left: 20px;
+  color: white;
 }
 
 .icons-attribution,
@@ -56,6 +57,7 @@ ul {
 .fallen-soldier-block {
   margin-top: 20px;
   min-height: 50px;
+  color: white;
 }
 
 .dark-square {

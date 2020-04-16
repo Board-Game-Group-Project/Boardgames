@@ -13,6 +13,7 @@ ul {
 
 .status {
   margin-bottom: 10px;
+  color: white;
 }
 
 .block {
@@ -33,6 +34,7 @@ ul {
 .game {
   display: flex;
   flex-direction: row;
+  margin-left: 45%;
 }
 
 .game-info {
