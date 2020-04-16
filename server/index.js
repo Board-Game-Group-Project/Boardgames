@@ -16,7 +16,7 @@ const io = socketIo(server)
 
 const rooms = [];
 const queueChess = [];
-const chessRooms = [];
+const chessFiller = [];
 const queueCheckers = [];
 const queueTicTacToe = [];
 const tttRooms = [];
@@ -59,14 +59,28 @@ io.on('connection', (socket) => {
             console.log(`Connected to ${player2.id}`)
             var chessRoom = `${player1.id}` + '' + `${player2.id}`
             player1.join(chessRoom)
-            player2.join(chessRoom)
-            chessRooms.push({player1,player2,chessRoom})
-            socket.to(chessRoom).emit('roomJoined',chessRoom)
+            player2.join(chessRoom)            
+            // socket.to(chessRoom).emit('roomJoined',chessRoom)
             player1.emit('roomJoined',chessRoom)
+            player1.emit('setWhite')
        }else{
            console.log('No one in Chess queue')
             queueChess.push(socket)
         }
+    })
+    socket.on('chessSetPlayers', (room) => {
+        
+        socket.to(room).emit('roomJoinedOpponent',room)
+        socket.to(room).emit('setBlack')
+                
+    })
+    socket.on('chessNextTurn', function(room,newBoard,turnInfo){
+        const player2 = room
+        socket.to(player2).emit('chessUpdateInfo',newBoard,turnInfo)
+    })
+    socket.on('chessEndGame', function(room,victory,winner){
+        const player2 = room
+        socket.to(player2).emit('chessFinish',victory,winner)
     })
 
     // TicTacToe Socket Stuff
@@ -106,6 +120,21 @@ io.on('connection', (socket) => {
     })
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} left`)
+        queueChess.forEach(e => {
+            if(e.id === socket.id){
+                queueChess.pop()
+            }
+        })
+        queueTicTacToe.forEach(e => {
+            if(e.id === socket.id){
+                queueTicTacToe.pop()
+            }
+        })
+        queueCheckers.forEach(e => {
+            if(e.id === socket.id){
+                queueCheckers.pop()
+            }
+        })
     })
 })
 
