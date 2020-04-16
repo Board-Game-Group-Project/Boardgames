@@ -10,3 +10,7 @@
 .MuiButton-label {
   color: white;
 }
+
+.MuiToolbar-root.MuiToolbar-regular.MuiToolbar-gutters {
+  background-color: #333333;
+}
