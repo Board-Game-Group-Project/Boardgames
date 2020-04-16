@@ -5,6 +5,11 @@ import '../Chess.css'
 import Board from './board.js';
 import initialiseChessBoard from '../helpers/board-initialiser.js';
 import io from 'socket.io-client'
+import Bishop from '../pieces/bishop'
+import Knight from '../pieces/knight'
+import Pawn from '../pieces/pawn'
+import Queen from '../pieces/queen'
+import Rook from '../pieces/rook'
 
 export default class Game extends React.Component {
   constructor() {
@@ -185,9 +190,24 @@ export default class Game extends React.Component {
       this.setState({player:2,playerColor:'Black',turn:false})
     })
     socket.on('chessUpdateInfo', (newBoard,turnInfo) => {
-      // var newBoard = newBoard
-      this.setState({turn:true,turnInfo:turnInfo,squares:newBoard})
-      console.log(newBoard[0])    
+      let updatedBoard = newBoard.map((e)=> {
+        if(e !== null){
+        if(e.type === "King"){
+          return new King(e.player)
+        } else if (e.type === "Bishop"){
+          return new Bishop(e.player)
+        } else if (e.type === "Knight"){
+          return new Knight(e.player)
+        } else if (e.type === "Pawn"){
+          return new Pawn(e.player)
+        } else if (e.type === "Queen"){
+          return new Queen(e.player)
+        } else if(e.type === "Rook"){
+          return new Rook(e.player)
+        } else return null;
+      }else return null})
+      this.setState({turn:true,turnInfo:turnInfo,squares:updatedBoard})
+      console.log(updatedBoard[0])    
     })
     return (
       <>
