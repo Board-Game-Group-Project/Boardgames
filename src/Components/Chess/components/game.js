@@ -14,13 +14,14 @@ export default class Game extends React.Component {
       player: 1,
       sourceSelection: -1,
       status: '',
-      turn: 'white',
       victory: 'test',
       turn: false,
+      turnInfo:'White',
       socket: io("http://localhost:4420"),
       socketConnect: false,
       inQueue: false,
-      room: null
+      room: null,
+      kingDead:false,
     }
   }
 
@@ -30,13 +31,14 @@ export default class Game extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.turn !== this.state.turn) {
+    if (prevState.kingDead !== this.state.kingDead) {
       this.isKingDead()
     }
     if (this.state.victory === 'We have a winner') {
 
     }
   }
+  
   isKingDead() {
     let kingCount = 0
     for (let i = 0; i < this.state.squares.length; i++) {
@@ -65,10 +67,10 @@ export default class Game extends React.Component {
   }
 
   handleClick(i) {
-    if(this.state.turn === true){
-
+    
     
     if (this.state.victory === 'test') {
+      if(this.state.turn === true){
       const squares = this.state.squares.slice();
       
 
@@ -112,14 +114,24 @@ export default class Game extends React.Component {
             squares[i] = squares[this.state.sourceSelection];
             squares[this.state.sourceSelection] = null;
             // let player = this.state.player === 1 ? 2 : 1;
-            let turn = this.state.turn === 'white' ? 'black' : 'white';
+            let turn = !this.state.turn
             this.setState({
               sourceSelection: -1,
               squares: squares,
               // player: player,
               status: '',
-              turn: turn
+              turn: turn,
+              kingDead:!this.state.kingDead
             });
+            if(this.state.turnInfo === 'White'){
+              this.setState({turnInfo:'Black'})
+            }else{
+              this.setState({turnInfo:'White'})
+            }
+            console.log(this.state.room)
+
+            this.state.socket.emit('chessNextTurn',this.state.room,this.state.board)
+
             this.isKingDead()
           }
         
@@ -131,10 +143,10 @@ export default class Game extends React.Component {
           }
         }
       }
+    }else{
+      this.setState({status:"It's not your turn!"})
+    }
     } else { this.setState({ status: 'The game is already won' }) }
-  }else{
-    this.setState({status:"It's not your turn!"})
-  }
 
   }
 
@@ -162,13 +174,23 @@ export default class Game extends React.Component {
       this.setState({ socketConnect: true, room: room })
       socket.emit('chessSetPlayers',this.state.room)
     })
+    socket.on('roomJoinedOpponent', (room) => {
+      this.setState({socketConnect:true,room:room})
+    })
     socket.on('setWhite',() => {
       this.setState({player:1,turn:true})
-      console.log(this.state.player)
     })
     socket.on('setBlack', () => {
       this.setState({player:2,turn:false})
-      console.log(this.state.player)
+    })
+    socket.on('chessUpdateInfo', (newBoard) => {
+      this.setState({turn:true})
+      if(this.state.turnInfo === 'White'){
+        this.setState({turnInfo:'Black'})
+      }else{
+        this.setState({turnInfo:'White'})
+      }
+      console.log('hit')
     })
     return (
       <>
@@ -189,6 +211,7 @@ export default class Game extends React.Component {
         ) : (
           <>
           <p>Player:{this.state.player}</p>
+          <p>Turn:{this.state.turnInfo}</p>
             <div style={{ marginLeft: '400px', marginTop: '100px' }}>
               <div className="game">
                 <div className="game-board">
