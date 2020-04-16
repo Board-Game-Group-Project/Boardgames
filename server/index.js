@@ -76,6 +76,7 @@ io.on('connection', (socket) => {
     })
     socket.on('chessNextTurn', function(room,newBoard,turnInfo){
         const player2 = room
+        console.log(newBoard)
         socket.to(player2).emit('chessUpdateInfo',newBoard,turnInfo)
     })
 

@@ -12,6 +12,7 @@ export default class Game extends React.Component {
     this.state = {
       squares: initialiseChessBoard(),
       player: 1,
+      playerColor:'',
       sourceSelection: -1,
       status: '',
       victory: 'test',
@@ -64,6 +65,9 @@ export default class Game extends React.Component {
 
       }
     }
+  }
+  nextTurn(){
+    
   }
 
   handleClick(i) {
@@ -124,8 +128,10 @@ export default class Game extends React.Component {
             });
             let turnInfo = this.state.turnInfo === 'White' ? 'Black' : 'White';
             this.setState({turnInfo:turnInfo})
+            let newBoard = squares
+            console.log(squares[0])
 
-            this.state.socket.emit('chessNextTurn',this.state.room,this.state.board,turnInfo)
+            this.state.socket.emit('chessNextTurn',this.state.room,squares,turnInfo)
 
             this.isKingDead()
           }
@@ -173,14 +179,15 @@ export default class Game extends React.Component {
       this.setState({socketConnect:true,room:room})
     })
     socket.on('setWhite',() => {
-      this.setState({player:1,turn:true})
+      this.setState({player:1,playerColor:'White',turn:true})
     })
     socket.on('setBlack', () => {
-      this.setState({player:2,turn:false})
+      this.setState({player:2,playerColor:'Black',turn:false})
     })
     socket.on('chessUpdateInfo', (newBoard,turnInfo) => {
-      this.setState({turn:true,turnInfo:turnInfo})    
-      console.log('hit')  
+      // var newBoard = newBoard
+      this.setState({turn:true,turnInfo:turnInfo,squares:newBoard})
+      console.log(newBoard[0])    
     })
     return (
       <>
@@ -200,21 +207,17 @@ export default class Game extends React.Component {
           </>
         ) : (
           <>
-          <p>Player:{this.state.player}</p>
-          <p>Turn:{this.state.turnInfo}</p>
             <div style={{ marginLeft: '400px', marginTop: '100px' }}>
               <div className="game">
                 <div className="game-board">
                   <Board
                     squares={this.state.squares}
                     onClick={(i) => this.handleClick(i)}
-                  />
+                    />
                 </div>
                 <div className="game-info">
-                  <h3>Turn</h3>
-                  <div id="player-turn-box" style={{ backgroundColor: this.state.turn }}>
-
-                  </div>
+                    <p>Player:{this.state.playerColor}</p>
+                    <p>Turn:{this.state.turnInfo}</p>
                   <div className="game-status">{this.state.status}</div>
                 </div>
               </div>
