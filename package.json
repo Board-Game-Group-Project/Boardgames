@@ -46,6 +46,11 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "watchPathIgnorePatterns": [
+      "<rootDir>/src/__tests__/__data__"
+    ]
+  },
   "main": "server/index.js",
   "proxy": "http://localhost:4420"
 }
