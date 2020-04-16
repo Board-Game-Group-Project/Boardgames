@@ -76,8 +76,11 @@ io.on('connection', (socket) => {
     })
     socket.on('chessNextTurn', function(room,newBoard,turnInfo){
         const player2 = room
-        console.log(newBoard)
         socket.to(player2).emit('chessUpdateInfo',newBoard,turnInfo)
+    })
+    socket.on('chessEndGame', function(room,victory,winner){
+        const player2 = room
+        socket.to(player2).emit('chessFinish',victory,winner)
     })
 
     // TicTacToe Socket Stuff

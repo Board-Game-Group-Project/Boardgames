@@ -41,7 +41,6 @@ export default class Game extends React.Component {
       this.isKingDead()
     }
     if (this.state.victory === 'We have a winner') {
-
     }
   }
   
@@ -56,24 +55,27 @@ export default class Game extends React.Component {
       }
     }
     if (kingCount < 2) {
-      if (this.state.player === 1) {
+      if (this.state.playerColor === 'Black') {
+        let winner = 'Black wins!'
+        let victory = 'We have a winner'
         this.setState({
-          victory: 'We have a winner',
-          status: 'Black wins!'
+          victory: victory,
+          status: winner
         })
+        this.state.socket.emit('chessEndGame', this.state.room,victory,winner)
 
-      } else if (this.state.player === 2) {
+      } else if (this.state.playerColor === 'White') {
+        let winner = 'White wins!'
+        let victory = 'We have a winner'
         this.setState({
-          victory: 'We have a winner',
-          status: 'White wins!'
+          victory: victory,
+          status: winner
         })
-
+        this.state.socket.emit('chessEndGame', this.state.room,victory,winner)
       }
     }
   }
-  nextTurn(){
-    
-  }
+  
 
   handleClick(i) {
     
@@ -133,10 +135,8 @@ export default class Game extends React.Component {
             });
             let turnInfo = this.state.turnInfo === 'White' ? 'Black' : 'White';
             this.setState({turnInfo:turnInfo})
-            let newBoard = squares
-            console.log(squares[0])
 
-            this.state.socket.emit('chessNextTurn',this.state.room,squares,turnInfo)
+            this.state.socket.emit('chessNextTurn',this.state.room,squares,turnInfo,this.state.victory)
 
             this.isKingDead()
           }
@@ -171,7 +171,7 @@ export default class Game extends React.Component {
 
 
 
-  render() {
+  render(props) {
     let socket = this.state.socket
     let queue = () => {
       this.setState({ inQueue: !this.state.inQueue })
@@ -206,9 +206,14 @@ export default class Game extends React.Component {
           return new Rook(e.player)
         } else return null;
       }else return null})
+
       this.setState({turn:true,turnInfo:turnInfo,squares:updatedBoard})
-      console.log(updatedBoard[0])    
+      console.log(updatedBoard[0])  
+
     })
+    socket.on('chessFinish',(victory,winner) => {
+        this.setState({victory:victory,status:winner})
+    })  
     return (
       <>
         {this.state.socketConnect === false ? (
@@ -239,6 +244,11 @@ export default class Game extends React.Component {
                     <p>Player:{this.state.playerColor}</p>
                     <p>Turn:{this.state.turnInfo}</p>
                   <div className="game-status">{this.state.status}</div>
+                  {this.state.victory === 'test' ? (
+                    null
+                  ):(
+                    <button onClick={() => this.props.history.push('/profile')}>Exit Game</button>
+                  )}
                 </div>
               </div>
             </div>
