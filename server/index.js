@@ -16,8 +16,11 @@ const io = socketIo(server)
 
 const rooms = [];
 const queueChess = [];
+const chessRooms = [];
 const queueCheckers = [];
 const queueTicTacToe = [];
+const tttRooms = [];
+const tttJoin = [];
 
 app.get('/', (req,res) => {
     res.sendFile(__dirname + '/index.js')
@@ -30,69 +33,9 @@ io.on('connection', (socket) => {
             rooms.push(serverID)
             console.log(`User ${serverID} has connected`)
     })
-    socket.on('queue', function(game){
-        let selectedGame = game
-        if(selectedGame === 'Chess'){
-            if(queueChess.length !== 0){
-                var opponent = queueChess.pop()
-                console.log(`Connected to ${opponent.id}`)
-                var chessRoom = `${socket.id}` + '' + `${opponent.id}`
-                socket.join(chessRoom, () => {
-                    console.log(socket.rooms)
-                })
-                opponent.join(chessRoom, () => {
-                    console.log(opponent.rooms)
-                })
-                socket.to(chessRoom).emit('joinChess');
-                socket.emit('joinChess')
-           }else{
-               console.log('No one in Chess queue')
-                queueChess.push(socket)
-            }
-        }else if(selectedGame === 'Checkers'){
-            if(queueCheckers.length !== 0){
-                var opponent = queueChess.pop()
-                console.log(`Connected to ${opponent.id}`)
-                var checkersRoom = `${socket.id}` + '' + `${opponent.id}`
-                socket.join(checkersRoom, () => {
-                    console.log(socket.rooms)
-                })
-                opponent.join(checkersRoom, () => {
-                    console.log(opponent.rooms)
-                })
-                socket.to(checkersRoom).emit('joinCheckers')
-                socket.emit('joinCheckers')
-
-           }else{
-               console.log('No one in Checkers queue')
-                queueCheckers.push(socket)
-            }
-        }else if(selectedGame === 'Tic-Tac-Toe'){
-            if(queueTicTacToe.length !== 0){
-                var opponent = queueTicTacToe.pop()
-                console.log(`Connected to ${opponent.id}`)
-                var ticTacToeRoom = `${socket.id}` + '' + `${opponent.id}`
-                socket.join(ticTacToeRoom, () => {
-                    console.log(socket.rooms)
-                })
-                opponent.join(ticTacToeRoom, () => {
-                    console.log(opponent.rooms)
-                })
-                socket.to(ticTacToeRoom).emit('joinTicTacToe');
-                socket.emit('joinTicTacToe')
-
-           }else{
-               console.log('No one in TicTacToe queue')
-                queueTicTacToe.push(socket)
-            }
-
-        }
-    })
+    // Queue Socket Stuff 
     socket.on('leaveQueue', () => {
-        console.log(queueChess.length)
         queueChess.forEach(e => {
-            console.log(e.id)
-            console.log(socket.id)
             if(e.id === socket.id){
                 queueChess.pop()
             }
@@ -108,6 +51,56 @@ io.on('connection', (socket) => {
             }
         })
     })
+    // Chess Socket Stuff
+    socket.on('chessQueue', () => {
+        if(queueChess.length !== 0){
+            var player1 = socket
+            var player2 = queueChess.pop()
+            console.log(`Connected to ${player2.id}`)
+            var chessRoom = `${player1.id}` + '' + `${player2.id}`
+            player1.join(chessRoom)
+            player2.join(chessRoom)
+            chessRooms.push({player1,player2,chessRoom})
+            socket.to(chessRoom).emit('roomJoined',chessRoom)
+            player1.emit('roomJoined',chessRoom)
+       }else{
+           console.log('No one in Chess queue')
+            queueChess.push(socket)
+        }
+    })
+
+    // TicTacToe Socket Stuff
+    socket.on('tttQueue', () => {
+        if(queueTicTacToe.length !== 0){
+            var player1 = socket
+            var player2 = queueTicTacToe.pop()
+            console.log(`Connected to ${player2.id}`)
+            var tttRoom = `${player1.id}` + '' + `${player2.id}`
+            player1.join(tttRoom)
+            player2.join(tttRoom)
+            tttRooms.push({player1,player2,tttRoom})
+            socket.to(tttRoom).emit('tttRoomJoined',tttRoom)
+            player1.emit('tttRoomJoined',tttRoom)
+       }else{
+           console.log('No one in TicTacToe queue')
+            queueTicTacToe.push(socket)
+        }
+    })
+    socket.on('tttSetPlayers', () => {
+        const room = tttJoin
+        if(room.length <= 0){
+            socket.emit('setX')
+            room.push(123)
+        }else{
+            socket.emit('setO')
+            let removedPlayer = room.pop()
+            delete removedPlayer
+        }
+    })
+    socket.on('tttNextTurn', function(board,room){
+        socket.to(room).emit('nextTurn',board)
+    })
+
     socket.on('leaveGame', () => {
         console.log(socket.id)
     })
