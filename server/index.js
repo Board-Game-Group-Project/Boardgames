@@ -106,8 +106,8 @@ io.on('connection', (socket) => {
         socket.to(room).emit('tttOpponentJoin',room)
         socket.to(room).emit('setO')
     })
-    socket.on('tttNextTurn', function(board,room){
-        socket.to(room).emit('nextTurn',board)
+    socket.on('tttNextTurn', function(board,room,turn){
+        socket.to(room).emit('nextTurn',board,turn)
     })
 
     socket.on('leaveGame', () => {

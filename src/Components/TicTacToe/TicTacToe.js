@@ -46,7 +46,7 @@ class Board extends Component {
                 xIsNext: !this.state.xIsNext,
             });
             this.setState({myTurn:false})
-            this.state.socket.emit('tttNextTurn', squares, this.state.room)
+            this.state.socket.emit('tttNextTurn', squares, this.state.room, this.state.xIsNext)
 
             
         }
@@ -90,11 +90,9 @@ class Board extends Component {
         socket.on('setO', () => {
             this.setState({xOrO:'O',myTurn:false})
         })
-        socket.on('nextTurn',(playerBoard) => {
+        socket.on('nextTurn',(playerBoard,turn) => {
             let newBoard = playerBoard
-            this.setState({board:newBoard,myTurn:true})
-            console.log(newBoard)
-            console.log(this.state.board)
+            this.setState({squares:newBoard,myTurn:true,xIsNext:turn})
         })
 
         return (
