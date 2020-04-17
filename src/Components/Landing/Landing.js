@@ -32,7 +32,7 @@ function Landing (props) {
         <p
           className='greeting'
         >
-          Battle others in a game of chess!
+          Battle others in a game of chess or Tic-Tac-Toe!
           Login to continue.
         </p>
       </div>

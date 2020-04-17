@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, act } from '@testing-library/react';
+import piece from '../../src/Components/Chess/pieces/piece'
 import bishop from '../../src/Components/Chess/pieces/bishop';
 import king from '../../src/Components/Chess/pieces/king';
 import knight from '../../src/Components/Chess/pieces/knight';

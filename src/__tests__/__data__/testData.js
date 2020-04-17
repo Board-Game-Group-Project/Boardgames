@@ -18,3 +18,5 @@ export const players = [
     password: 'p03'
   },
 ];
+
+// This probably needs some socket dummy data, too
