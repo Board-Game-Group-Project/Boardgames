@@ -233,7 +233,7 @@ export default class Game extends React.Component {
           </>
         ) : (
             <>
-              <div style={{ marginLeft: '200px', marginTop: '100px' }}>
+              <div style={{ marginLeft: '0px', marginTop: '100px' }}>
                 <div className="game">
                   <div className="game-board">
                     <Board

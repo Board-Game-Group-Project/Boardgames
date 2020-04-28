@@ -57,11 +57,7 @@
   height: 55vh;
   width: 40vh;
   padding: 15px;
-  background-color: rgba(52, 134, 170, 0.8);
-}
-
-.login-card:hover, .register-card:hover {
-  background: rgba(52, 134, 170, 0.6);
+  background-color: rgb(62, 64, 65);
 }
 
 .landing-form {
@@ -90,7 +86,7 @@
 }
 
 .landing-button {
-  background-color: rgba(225, 134, 68, 0.8);
+  background-color:  rgb(161, 152, 144, .7);
   border: none;
   color: #c0dee0;
   padding: 2vh;
@@ -102,6 +98,6 @@
 }
 
 .landing-button:hover {
-  background-color: #e18644;
+  background-color: rgb(161, 152, 144, 1);
 }
 /*# sourceMappingURL=Landing.css.map */
