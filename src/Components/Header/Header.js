@@ -88,6 +88,13 @@ function Header(props) {
           <ListItem button>
             <ListItemText primary='TicTacToe' />
           </ListItem></Link>
+        <Link to='/tictactoelocal' style={{
+          textDecoration: 'none',
+          color: 'black'
+        }}>
+          <ListItem button>
+            <ListItemText primary='TicTacToe Local Play' />
+          </ListItem></Link>
         <Link to='/scoreboard' style={{
           textDecoration: 'none',
           color: 'black'
