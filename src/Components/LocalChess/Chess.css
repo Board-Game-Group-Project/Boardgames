@@ -51,13 +51,12 @@ ul {
 .game-board{
   /* width: 100vw; */
   margin-left: -50%;
-  position: relative;
+  margin-top: 20px;
 }
 .game-info {
   margin-top: 30px;
-  margin-bottom: 30px;
   color: white;
-  position: relative;
+  position: fixed;
 }
 
 .icons-attribution,
