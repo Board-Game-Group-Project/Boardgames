@@ -45,11 +45,18 @@ ul {
 .game {
   display: flex;
   flex-direction: row;
+  width: 45vw;
 }
-
+.game-board{
+  /* width: 100vw; */
+  margin-left: -50%;
+}
 .game-info {
-  margin-left: 20px;
-  color: white;
+  margin-right: 0px;
+  margin-top: 30px;
+  margin-bottom: -50px;
+  color: crimson;
+  position: relative;
 }
 
 .icons-attribution,

@@ -233,14 +233,7 @@ export default class Game extends React.Component {
           </>
         ) : (
             <>
-              <div style={{ marginLeft: '200px', marginTop: '100px' }}>
-                <div className="game">
-                  <div className="game-board">
-                    <Board
-                      squares={this.state.squares}
-                      onClick={(i) => this.handleClick(i)}
-                    />
-                  </div>
+              <div>
                   <div className="game-info">
                     <p>Player:{this.state.playerColor}</p>
                     <p>Turn:{this.state.turnInfo}</p>
@@ -250,8 +243,16 @@ export default class Game extends React.Component {
                     ) : (
                         <button onClick={() => this.props.history.push('/profile')}>Exit Game</button>
                       )}
-                  </div>
+                  
                 </div>
+                <div className="game">
+                  <div className="game-board">
+                    <Board
+                      squares={this.state.squares}
+                      onClick={(i) => this.handleClick(i)}
+                    />
+                  </div>
+                  </div>
               </div>
             </>
           )}

@@ -16,7 +16,8 @@ ul {
 }
 
 .status {
-  margin-bottom: 10px;
+  margin-bottom: -10px;
+  position: relative;
 }
 
 .square {
@@ -45,11 +46,18 @@ ul {
 .game {
   display: flex;
   flex-direction: row;
+  width: 45vw;
 }
-
+.game-board{
+  /* width: 100vw; */
+  margin-left: -50%;
+  position: relative;
+}
 .game-info {
-  margin-left: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
   color: white;
+  position: relative;
 }
 
 .icons-attribution,
