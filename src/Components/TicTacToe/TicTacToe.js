@@ -113,9 +113,9 @@ class Board extends Component {
                             )}
                     </>
                 ) : (
-                        <div>
+                        <div className='tttBoard'>
                             <div className="status">{status}</div>
-                            <p style={{ color: 'white' }}>You're player: {this.state.xOrO}</p>
+                            <p style={{ color: 'white' }} className='playerInfo'>You're player: {this.state.xOrO}</p>
                             <div className="board-row">
                                 {this.renderSquare(0)}
                                 {this.renderSquare(1)}
