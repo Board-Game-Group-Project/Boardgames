@@ -101,12 +101,12 @@ class Board extends Component {
                 {this.state.socketConnect === false ? (
                     <>
                         {this.state.inQueue === false ? (
-                            <div>
+                            <div className='queue'>
                                 <h1 style={{ color: 'white' }}>JOIN QUEUE</h1>
                                 <button onClick={() => socket.emit('tttQueue', queue())}>Join Queue</button>
                             </div>
                         ) : (
-                                <div>
+                                <div className='queue'>
                                     <h1 style={{ color: 'white' }}>LEAVE QUEUE</h1>
                                     <button onClick={() => socket.emit('leaveQueue', queue())}>Leave Queue</button>
                                 </div>
