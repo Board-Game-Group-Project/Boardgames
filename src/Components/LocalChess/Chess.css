@@ -27,16 +27,21 @@ ul {
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 48px;
+  height: 24px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 48px;
+  width: 24px;
+  background-color: lightgreen;
 }
 
 .square:focus {
   outline: none;
+  border: solid 2px black;
+}
+.square:hover{
+  background-color: light;
 }
 
 .kbd-navigation .square:focus {
@@ -49,16 +54,15 @@ ul {
   width: 45vw;
 }
 .game-board{
-  /* width: 100vw; */
   margin-left: -50%;
   margin-top: 20px;
 }
 .game-info {
   margin-top: 30px;
   color: white;
-  position: fixed;
+  overflow: auto;
+  /* position: fixed; */
 }
-
 .icons-attribution,
 .game-status,
 .fallen-soldier-block {
@@ -67,11 +71,11 @@ ul {
   color: white;
 }
 
-.dark-square {
+#dark-square {
   background-color: red;
 }
 
-.light-square {
+#light-square {
   background-color: green;
 }
 

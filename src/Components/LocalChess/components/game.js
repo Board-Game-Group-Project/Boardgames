@@ -14,9 +14,9 @@ export default class Game extends React.Component {
       player: 1,
       sourceSelection: -1,
       status: '',
-      turn: 'white',
+      turn: 'White',
       victory: 'test',
-      turn: 'white',
+      // turn: 'white',
      
     }
   }
@@ -101,7 +101,7 @@ export default class Game extends React.Component {
             squares[i] = squares[this.state.sourceSelection];
             squares[this.state.sourceSelection] = null;
             let player = this.state.player === 1 ? 2 : 1;
-            let turn = this.state.turn === 'white' ? 'black' : 'white';
+            let turn = this.state.turn === 'White' ? 'Black' : 'White';
             this.setState({
               sourceSelection: -1,
               squares: squares,
@@ -142,8 +142,8 @@ export default class Game extends React.Component {
             <div>
                 <div className="game-info">
                   <h3>Turn</h3>
-                  <div id="player-turn-box" style={{ backgroundColor: this.state.turn }}>
-
+                  <div id="player-turn-box">
+                  <p>{this.state.turn}</p>
                   </div>
                   <div className="game-status">{this.state.status}</div>
                 </div>

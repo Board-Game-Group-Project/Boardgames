@@ -5,7 +5,8 @@ import '../Chess.css';
 export default function Square(props) {
 
   return (
-    <button className={"square " + props.shade}
+    <button className={"square "}
+      id={`${props.shade}`}
       onClick={props.onClick}
       style={props.style}>
 

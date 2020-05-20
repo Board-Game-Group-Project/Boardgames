@@ -56,7 +56,11 @@ ul {
   margin-top: 30px;
   margin-bottom: -50px;
   color: crimson;
-  position: relative;
+  /* position: relative; */
+  /* border: solid white 2px; */
+  width: 10.416666666666666vw;
+  overflow: auto;
+  padding-bottom: 2px;
 }
 
 .icons-attribution,
@@ -67,11 +71,11 @@ ul {
   color: white;
 }
 
-.dark-square {
+#dark-square {
   background-color: red;
 }
 
-.light-square {
+#light-square {
   background-color: green;
 }
 
